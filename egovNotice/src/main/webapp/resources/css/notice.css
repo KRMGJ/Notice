@@ -1,0 +1,166 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+}
+
+.wrap {
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 22px;
+	margin: 0 0 16px;
+}
+
+.toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+	gap: 12px;
+	margin: 12px 0;
+}
+
+.search {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+select, input[type="text"] {
+	height: 32px;
+	padding: 0 8px;
+	box-sizing: border-box;
+}
+
+button, .btn {
+	height: 32px;
+	padding: 0 12px;
+	cursor: pointer;
+}
+
+.muted {
+	color: #666;
+	font-size: 12px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 10px;
+	font-size: 14px;
+}
+
+th {
+	background: #f7f7f7;
+}
+
+.col-no {
+	width: 70px;
+	text-align: center;
+}
+
+.col-date {
+	width: 170px;
+	text-align: center;
+}
+
+.col-view {
+	width: 90px;
+	text-align: center;
+}
+
+.notice {
+	background: #fff7e6;
+}
+
+.pagination {
+	margin: 16px 0;
+	display: flex;
+	justify-content: center;
+}
+
+a {
+	color: #1a73e8;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* detail/form 공통 */
+.box {
+	border: 1px solid #ddd;
+	padding: 14px;
+	border-radius: 6px;
+}
+
+.meta {
+	display: flex;
+	gap: 16px;
+	color: #666;
+	font-size: 13px;
+	margin-bottom: 12px;
+	flex-wrap: wrap;
+}
+
+.content {
+	white-space: pre-wrap;
+	line-height: 1.6;
+	font-size: 14px;
+}
+
+.files {
+	margin-top: 14px;
+}
+
+.files ul {
+	margin: 6px 0 0;
+	padding-left: 18px;
+}
+
+.actions {
+	margin-top: 14px;
+	display: flex;
+	gap: 8px;
+}
+
+.actions button {
+	height: 34px;
+}
+
+.row {
+	margin-bottom: 12px;
+}
+
+label {
+	display: block;
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+
+textarea {
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	min-height: 240px;
+	resize: vertical;
+}
+
+.grid2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+.hint {
+	color: #666;
+	font-size: 12px;
+	margin-top: 4px;
+}
