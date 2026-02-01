@@ -9,7 +9,8 @@
 	<!-- MyBatis SqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/**/*.xml" />
+		<property name="configLocation" value="classpath:/egovframework/sqlmap/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/bbs/**/*.xml" />
 	</bean>
 	
 	<alias name="sqlSessionFactory" alias="sqlSession"/>

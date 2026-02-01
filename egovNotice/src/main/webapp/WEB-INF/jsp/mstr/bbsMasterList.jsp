@@ -6,8 +6,8 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/bbsMaster.css'/>" />
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="<c:url value='/resources/js/bbsMaster.common.js'/>"></script>
-<script src="<c:url value='/resources/js/bbsMaster.list.js'/>"></script>
+<script src="<c:url value='/resources/js/mstr/bbsMaster.common.js'/>"></script>
+<script src="<c:url value='/resources/js/mstr/bbsMaster.list.js'/>"></script>
 
 <div class="bm-wrap">
 	<h2 class="bm-title">게시판 마스터 관리</h2>

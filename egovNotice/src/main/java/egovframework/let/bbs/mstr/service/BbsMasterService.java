@@ -23,4 +23,22 @@ public interface BbsMasterService {
 	 * @throws Exception
 	 */
 	int selectBbsMasterListCnt(BbsMasterVO searchVO) throws Exception;
+
+	/**
+	 * 게시판 마스터 정보를 등록한다.
+	 * 
+	 * @param bbsMasterVO - 등록할 정보가 담긴 VO
+	 * @return String - 등록한 게시판 ID
+	 * @throws Exception
+	 */
+	String insertBbsMaster(BbsMasterVO vo) throws Exception;
+
+	/**
+	 * 게시판 마스터 상세정보를 조회한다.
+	 * 
+	 * @param vo - 조회할 정보가 담긴 VO
+	 * @return 게시판 마스터 상세정보
+	 * @throws Exception
+	 */
+	BbsMasterVO selectBbsMasterDetail(BbsMasterVO vo) throws Exception;
 }

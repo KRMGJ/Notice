@@ -29,4 +29,23 @@ public class BbsMasterDAO extends EgovAbstractMapper {
 	public int selectBbsMasterListCnt(BbsMasterVO vo) {
 		return selectOne("BbsMasterDAO.selectBbsMasterListCnt", vo);
 	}
+
+	/**
+	 * 게시판 마스터 정보를 등록한다.
+	 * 
+	 * @param vo - 등록할 정보가 담긴 VO
+	 */
+	public void insertBbsMaster(BbsMasterVO vo) {
+		insert("BbsMasterDAO.insertBbsMaster", vo);
+	}
+
+	/**
+	 * 게시판 마스터 상세정보를 조회한다.
+	 * 
+	 * @param vo - 조회할 정보가 담긴 VO
+	 * @return 게시판 마스터 상세정보
+	 */
+	public BbsMasterVO selectBbsMasterDetail(BbsMasterVO vo) {
+		return selectOne("BbsMasterDAO.selectBbsMasterDetail", vo);
+	}
 }
