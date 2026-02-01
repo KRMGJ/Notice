@@ -65,7 +65,7 @@ public class NoticeController {
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("searchVO", searchVO);
 
-		return "notice/noticeList";
+		return "ntt/noticeList";
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class NoticeController {
 			vo.setBbsId("BBSMSTR_000000000001");
 		}
 		model.addAttribute("notice", vo);
-		return "notice/noticeForm";
+		return "ntt/noticeForm";
 	}
 
 	@RequestMapping(value = "/notice/insert.do", method = RequestMethod.POST)
