@@ -1,4 +1,4 @@
-package egovframework.let.bbs.user.service;
+package egovframework.let.bbs.user.auth.service;
 
 import egovframework.com.cmm.vo.LoginVO;
 

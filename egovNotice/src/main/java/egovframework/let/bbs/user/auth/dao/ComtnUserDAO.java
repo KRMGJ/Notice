@@ -1,9 +1,9 @@
-package egovframework.let.bbs.user.dao;
+package egovframework.let.bbs.user.auth.dao;
 
 import org.egovframe.rte.psl.dataaccess.EgovAbstractMapper;
 import org.springframework.stereotype.Repository;
 
-import egovframework.let.bbs.user.vo.ComtnUserVO;
+import egovframework.let.bbs.user.auth.vo.ComtnUserVO;
 
 @Repository("comtnUserDAO")
 public class ComtnUserDAO extends EgovAbstractMapper {

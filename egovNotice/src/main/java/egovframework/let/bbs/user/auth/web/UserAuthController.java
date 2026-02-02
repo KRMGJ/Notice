@@ -1,4 +1,4 @@
-package egovframework.let.bbs.user.web;
+package egovframework.let.bbs.user.auth.web;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.com.cmm.vo.LoginVO;
-import egovframework.let.bbs.user.service.UserAuthService;
+import egovframework.let.bbs.user.auth.service.UserAuthService;
 
 @Controller
 public class UserAuthController {
