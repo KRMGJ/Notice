@@ -9,7 +9,7 @@ $(function() {
 		}
 
 		$.ajax({
-			url: "/bbs/user/login.do",
+			url: "/user/login.do",
 			type: "POST",
 			dataType: "json",
 			data: { userId: userId, password: password },

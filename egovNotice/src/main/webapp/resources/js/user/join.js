@@ -7,7 +7,6 @@ $(function() {
 		}
 
 		$.get("/user/checkUserId.do", { userId: userId }, function(res) {
-			console.log(res);
 			if (res.duplicated) {
 				$("#msg").text("이미 사용 중인 아이디입니다.");
 			} else {
