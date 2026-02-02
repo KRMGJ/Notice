@@ -8,6 +8,8 @@ import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.bbs.mstr.dao.BbsMasterDAO;
 import egovframework.let.bbs.mstr.service.BbsMasterService;
 import egovframework.let.bbs.mstr.vo.BbsMasterVO;
@@ -20,22 +22,6 @@ public class BbsMasterServiceImpl implements BbsMasterService {
 
 	@Resource(name = "bbsMasterIdGnrService")
 	private EgovIdGnrService bbsMasterIdGnrService;
-
-	/**
-	 * 프로젝트에 로그인 연동이 아직 없으면 null 리턴. 연동되어 있으면 로그인 사용자 uniqId 또는 id를 리턴하도록 바꿔라.
-	 */
-	private String getLoginIdOrNull() {
-		try {
-//			Object obj = EgovUserDetailsHelper.getAuthenticatedUser();
-//			if (obj instanceof LoginVO) {
-//				return ((LoginVO) obj).getUniqId();
-//			}
-			// return EgovUserDetailsHelper.getAuthenticatedUser().toString();
-			return null;
-		} catch (Exception e) {
-			return null;
-		}
-	}
 
 	/**
 	 * 게시판 마스터 목록을 조회한다.
@@ -74,8 +60,9 @@ public class BbsMasterServiceImpl implements BbsMasterService {
 		}
 
 		// 등록자/수정자 세팅(로그인 연동 전이면 임시값 가능)
-		// eGov 표준은 EgovUserDetailsHelper로 로그인ID를 가져온다.
-		String loginId = getLoginIdOrNull();
+		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		String loginId = (loginVO != null) ? loginVO.getUniqId() : "system";
+
 		vo.setFrstRegisterId(loginId);
 		vo.setLastUpdusrId(loginId);
 
@@ -105,7 +92,8 @@ public class BbsMasterServiceImpl implements BbsMasterService {
 			vo.setAtchPosblFileSize(0);
 		}
 
-		String loginId = getLoginIdOrNull();
+		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		String loginId = loginVO != null ? loginVO.getUniqId() : "system";
 		vo.setLastUpdusrId(loginId);
 
 		return bbsMasterDAO.updateBbsMaster(vo);

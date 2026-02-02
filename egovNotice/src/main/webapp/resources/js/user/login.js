@@ -1,0 +1,32 @@
+$(function() {
+	$("#btnLogin").on("click", function() {
+		var userId = $("#userId").val();
+		var password = $("#password").val();
+
+		if (!userId || !password) {
+			$("#msg").text("아이디/비밀번호를 입력하세요.");
+			return;
+		}
+
+		$.ajax({
+			url: "/user/login.do",
+			type: "POST",
+			dataType: "json",
+			data: { userId: userId, password: password },
+			success: function(res) {
+				if (res && res.result === "OK") {
+					location.href = "/notice/list.do";
+				} else {
+					$("#msg").text("로그인 실패");
+				}
+			},
+			error: function(xhr) {
+				if (xhr.responseJSON && xhr.responseJSON.message) {
+					$("#msg").text(xhr.responseJSON.message);
+					return;
+				}
+				$("#msg").text("로그인 실패");
+			}
+		});
+	});
+});

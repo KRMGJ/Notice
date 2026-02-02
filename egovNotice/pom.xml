@@ -18,7 +18,7 @@
 	</licenses>
 
 	<properties>
-		<spring.maven.artifact.version>5.3.30</spring.maven.artifact.version>
+		<spring.maven.artifact.version>5.3.37</spring.maven.artifact.version>
 		<org.egovframe.rte.version>4.3.0</org.egovframe.rte.version>
 	</properties>
 
@@ -76,6 +76,11 @@
 		<dependency>
 			<groupId>org.egovframe.rte</groupId>
 			<artifactId>org.egovframe.rte.fdl.property</artifactId>
+			<version>${org.egovframe.rte.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.egovframe.rte</groupId>
+			<artifactId>org.egovframe.rte.fdl.crypto</artifactId>
 			<version>${org.egovframe.rte.version}</version>
 		</dependency>
 
@@ -221,6 +226,22 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.5</version>
 			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+		  	<groupId>com.fasterxml.jackson.core</groupId>
+		  	<artifactId>jackson-core</artifactId>
+		  	<version>2.15.2</version>
+		</dependency>
+		<dependency>
+		  	<groupId>com.fasterxml.jackson.core</groupId>
+		  	<artifactId>jackson-databind</artifactId>
+		  	<version>2.15.2</version>
+		</dependency>
+		<dependency>
+		  	<groupId>com.fasterxml.jackson.core</groupId>
+		  	<artifactId>jackson-annotations</artifactId>
+		  	<version>2.15.2</version>
 		</dependency>
 	</dependencies>
 
