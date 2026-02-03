@@ -8,18 +8,18 @@
 <title>공지사항 상세</title>
 
 <link rel="stylesheet" href="<c:url value='/resources/css/notice.css'/>" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-	<div class="wrap">
+	<%@ include file="/WEB-INF/jsp/cmm/header.jsp" %>
+	<div class="nt-wrap">
 		<h1>공지사항 상세</h1>
 
-		<div class="box">
+		<div class="nt-box">
 			<div style="font-size: 18px; font-weight: 700; margin-bottom: 10px;">
 				<c:out value="${notice.nttSj}" />
 			</div>
 
-			<div class="meta">
+			<div class="nt-meta">
 				<div>
 					등록일:
 					<c:out value="${notice.frstRegistPnttm}" />
@@ -33,15 +33,15 @@
 					<c:out value="${notice.inqireCo}" />
 				</div>
 				<c:if test="${notice.noticeAt == 'Y'}">
-					<div class="muted">[공지]</div>
+					<div class="nt-muted">[공지]</div>
 				</c:if>
 			</div>
 
-			<div class="content">
+			<div class="nt-content">
 				<c:out value="${notice.nttCn}" />
 			</div>
 
-			<div class="files">
+			<div class="nt-files">
 				<div style="font-weight: 700;">첨부파일</div>
 				<c:choose>
 					<c:when test="${not empty fileList}">
@@ -54,18 +54,18 @@
                         				</c:url>">
 										<c:out value="${f.orignlFileNm}" />
 									</a> 
-									<span class="muted">(<c:out value="${f.fileSize}" />bytes)</span>
+									<span class="nt-muted">(<c:out value="${f.fileSize}" />bytes)</span>
 								</li>
 							</c:forEach>
 						</ul>
 					</c:when>
 					<c:otherwise>
-						<div class="muted">첨부파일이 없습니다.</div>
+						<div class="nt-muted">첨부파일이 없습니다.</div>
 					</c:otherwise>
 				</c:choose>
 			</div>
 
-			<div class="actions">
+			<div class="nt-actions">
 				<button type="button" id="btnList">목록</button>
 				<button type="button" id="btnEdit">수정</button>
 				<button type="button" id="btnDelete">삭제</button>
@@ -74,23 +74,5 @@
 
 	</div>
 </body>
-<script>
-	$(function() {
-		$("#btnList").on("click", function() {
-			location.href = "<c:url value='/notice/list.do'/>";
-		});
-
-		$("#btnEdit").on("click", function() {
-					var id = "${notice.nttId}";
-					location.href = "<c:url value='/notice/form.do'/>?nttId=" + encodeURIComponent(id);
-				});
-
-		$("#btnDelete").on("click", function() {
-					if (!confirm("삭제하시겠습니까?"))
-						return;
-					var id = "${notice.nttId}";
-					location.href = "<c:url value='/notice/delete.do'/>?nttId=" + encodeURIComponent(id);
-				});
-	});
-</script>
+<script src="<c:url value='/resources/js/ntt/detail.js'/>"></script>
 </html>

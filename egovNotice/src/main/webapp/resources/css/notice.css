@@ -3,8 +3,8 @@ body {
 	margin: 20px;
 }
 
-.wrap {
-	max-width: 980px;
+.nt-wrap {
+	max-width: 1200px;
 	margin: 0 auto;
 }
 
@@ -13,7 +13,7 @@ h1 {
 	margin: 0 0 16px;
 }
 
-.toolbar {
+.nt-toolbar {
 	display: flex;
 	justify-content: space-between;
 	align-items: end;
@@ -21,7 +21,7 @@ h1 {
 	margin: 12px 0;
 }
 
-.search {
+.nt-search {
 	display: flex;
 	gap: 8px;
 	align-items: center;
@@ -33,13 +33,13 @@ select, input[type="text"] {
 	box-sizing: border-box;
 }
 
-button, .btn {
+button, .nt-btn {
 	height: 32px;
 	padding: 0 12px;
 	cursor: pointer;
 }
 
-.muted {
+.nt-muted {
 	color: #666;
 	font-size: 12px;
 }
@@ -60,22 +60,22 @@ th {
 	background: #f7f7f7;
 }
 
-.col-no {
+.nt-col-no {
 	width: 70px;
 	text-align: center;
 }
 
-.col-date {
+.nt-col-date {
 	width: 170px;
 	text-align: center;
 }
 
-.col-view {
+.nt-col-view {
 	width: 90px;
 	text-align: center;
 }
 
-.notice {
+.nt-notice {
 	background: #fff7e6;
 }
 
@@ -95,13 +95,13 @@ a:hover {
 }
 
 /* detail/form 공통 */
-.box {
+.nt-box {
 	border: 1px solid #ddd;
 	padding: 14px;
 	border-radius: 6px;
 }
 
-.meta {
+.nt-meta {
 	display: flex;
 	gap: 16px;
 	color: #666;
@@ -110,32 +110,32 @@ a:hover {
 	flex-wrap: wrap;
 }
 
-.content {
+.nt-content {
 	white-space: pre-wrap;
 	line-height: 1.6;
 	font-size: 14px;
 }
 
-.files {
+.nt-files {
 	margin-top: 14px;
 }
 
-.files ul {
+.nt-files ul {
 	margin: 6px 0 0;
 	padding-left: 18px;
 }
 
-.actions {
+.nt-actions {
 	margin-top: 14px;
 	display: flex;
 	gap: 8px;
 }
 
-.actions button {
+.nt-actions button {
 	height: 34px;
 }
 
-.row {
+.nt-row {
 	margin-bottom: 12px;
 }
 
@@ -150,16 +150,16 @@ textarea {
 	padding: 10px;
 	box-sizing: border-box;
 	min-height: 240px;
-	resize: vertical;
+	resize: none;
 }
 
-.grid2 {
+.nt-grid2 {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 12px;
 }
 
-.hint {
+.nt-hint {
 	color: #666;
 	font-size: 12px;
 	margin-top: 4px;

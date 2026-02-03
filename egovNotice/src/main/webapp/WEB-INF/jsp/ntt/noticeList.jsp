@@ -8,20 +8,19 @@
 <head>
 <meta charset="UTF-8" />
 <title>공지사항</title>
-
 <link rel="stylesheet" href="<c:url value='/resources/css/notice.css'/>" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-	<div class="wrap">
+	<%@ include file="/WEB-INF/jsp/cmm/header.jsp" %>
+	<div class="nt-wrap">
 		<h1>공지사항</h1>
 
 		<form id="searchForm" method="get">
 			<input type="hidden" name="pageIndex" value="${empty searchVO.pageIndex ? 1 : searchVO.pageIndex}" /> 
 			<input type="hidden" name="bbsId" value="${searchVO.bbsId}" />
 
-			<div class="toolbar">
-				<div class="search">
+			<div class="nt-toolbar">
+				<div class="nt-search">
 					<select name="searchCondition">
 						<option value="0"
 							<c:if test="${searchVO.searchCondition == '0'}">selected</c:if>>제목</option>
@@ -40,7 +39,7 @@
 			</div>
 		</form>
 
-		<div class="muted">
+		<div class="nt-muted">
 			총 <b>
 			<c:out value="${empty paginationInfo ? (empty totalCount ? 0 : totalCount) : paginationInfo.totalRecordCount}" />
 			</b>
@@ -50,10 +49,10 @@
 		<table>
 			<thead>
 				<tr>
-					<th class="col-no">번호</th>
+					<th class="nt-col-no">번호</th>
 					<th>제목</th>
-					<th class="col-date">등록일</th>
-					<th class="col-view">조회</th>
+					<th class="nt-col-date">등록일</th>
+					<th class="nt-col-view">조회</th>
 				</tr>
 			</thead>
 
@@ -61,18 +60,18 @@
 				<!-- 공지 상단 -->
 				<c:if test="${not empty pinnedList}">
 					<c:forEach var="n" items="${pinnedList}">
-						<tr class="notice">
-							<td class="col-no">공지</td>
+						<tr class="nt-notice">
+							<td class="nt-col-no">공지</td>
 							<td>
 								<a href="<c:url value='/notice/detail.do'><c:param name='nttId' value='${n.nttId}'/></c:url>">
 									<c:out value="${n.nttSj}" />
 								</a> 
 								<c:if test="${not empty n.atchFileId}">
-									<span class="muted">[첨부]</span>
+									<span class="nt-muted">[첨부]</span>
 								</c:if>
 							</td>
-							<td class="col-date"><c:out value="${n.frstRegistPnttm}" /></td>
-							<td class="col-view"><c:out value="${n.inqireCo}" /></td>
+							<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
+							<td class="nt-col-view"><c:out value="${n.inqireCo}" /></td>
 						</tr>
 					</c:forEach>
 				</c:if>
@@ -82,7 +81,7 @@
 					<c:when test="${not empty resultList}">
 						<c:forEach var="n" items="${resultList}">
 							<tr>
-								<td class="col-no"><c:out value="${n.nttId}" /></td>
+								<td class="nt-col-no"><c:out value="${n.nttId}" /></td>
 								<td>
 									<a href="<c:url value='/notice/detail.do'><c:param name='nttId' value='${n.nttId}'/></c:url>">
 										<c:out value="${n.nttSj}" />
@@ -91,8 +90,8 @@
 										<span class="muted">[첨부]</span>
 									</c:if>
 								</td>
-								<td class="col-date"><c:out value="${n.frstRegistPnttm}" /></td>
-								<td class="col-view"><c:out value="${n.inqireCo}" /></td>
+								<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
+								<td class="nt-col-view"><c:out value="${n.inqireCo}" /></td>
 							</tr>
 						</c:forEach>
 					</c:when>
@@ -113,20 +112,5 @@
 
 	</div>
 </body>
-<script>
-	function fn_egov_link_page(pageNo) {
-		$("#searchForm input[name='pageIndex']").val(pageNo);
-		$("#searchForm").attr("action", "<c:url value='/notice/list.do'/>").submit();
-	}
-
-	$(function() {
-		$("#btnSearch").on("click", function() {
-					$("#searchForm input[name='pageIndex']").val(1);
-					$("#searchForm").attr("action", "<c:url value='/notice/list.do'/>").submit();
-				});
-		$("#btnReg").on("click", function() {
-			location.href = "<c:url value='/notice/form.do'/>";
-		});
-	});
-</script>
+<script src="<c:url value='/resources/js/ntt/list.js'/>"></script>
 </html>
