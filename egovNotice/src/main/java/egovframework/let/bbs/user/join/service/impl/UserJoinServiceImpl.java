@@ -19,7 +19,7 @@ public class UserJoinServiceImpl implements UserJoinService {
 	private EgovPasswordEncoder passwordEncoder;
 
 	@Override
-	public void join(ComtnUserVO user) {
+	public void join(ComtnUserVO user) throws Exception {
 
 		if (user.getUserId() == null || user.getUserId().isEmpty()) {
 			throw new IllegalArgumentException("아이디를 입력하세요.");
@@ -41,7 +41,7 @@ public class UserJoinServiceImpl implements UserJoinService {
 	}
 
 	@Override
-	public boolean isDuplicatedUserId(String userId) {
+	public boolean isDuplicatedUserId(String userId) throws Exception {
 		return comtnUserDAO.selectUserIdCount(userId) > 0;
 	}
 

@@ -24,7 +24,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	 * 로그인 처리
 	 */
 	@Override
-	public LoginVO login(String userId, String rawPassword) {
+	public LoginVO login(String userId, String rawPassword) throws Exception {
 		ComtnUserVO user = comtnUserDAO.selectUserForLogin(userId);
 		if (user == null) {
 			throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
@@ -52,7 +52,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	 * 로그아웃 처리
 	 */
 	@Override
-	public void logout() {
+	public void logout() throws Exception {
 		EgovUserDetailsHelper.clearAuthenticatedUser();
 	}
 
@@ -60,7 +60,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	 * 현재 로그인 사용자 정보 조회(로그인하지 않은 경우 null 반환)
 	 */
 	@Override
-	public LoginVO meOrNull() {
+	public LoginVO meOrNull() throws Exception {
 		Object obj = EgovUserDetailsHelper.getAuthenticatedUser();
 		if (obj instanceof LoginVO) {
 			return (LoginVO) obj;

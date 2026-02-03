@@ -25,11 +25,15 @@ public class UserAuthController {
 		return "user/login";
 	}
 
-	/** 로그인 처리 */
+	/**
+	 * 로그인 처리
+	 * 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/user/login.do", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Model> login(@RequestParam("userId") String userId, @RequestParam("password") String password,
-			Model model) {
+			Model model) throws Exception {
 		LoginVO loginVO = userAuthService.login(userId, password);
 
 		model.addAttribute("result", "OK");
@@ -37,19 +41,27 @@ public class UserAuthController {
 		return ResponseEntity.ok(model);
 	}
 
-	/** 로그아웃 */
+	/**
+	 * 로그아웃
+	 * 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/user/logout.do", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Model> logout(Model model) {
+	public ResponseEntity<Model> logout(Model model) throws Exception {
 		userAuthService.logout();
 		model.addAttribute("result", "OK");
 		return ResponseEntity.ok(model);
 	}
 
-	/** 현재 로그인 사용자 */
+	/**
+	 * 현재 로그인 사용자
+	 * 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/user/me.do", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<Model> me(Model model) {
+	public ResponseEntity<Model> me(Model model) throws Exception {
 		LoginVO loginVO = userAuthService.meOrNull();
 		model.addAttribute("isLogin", loginVO != null);
 		model.addAttribute("loginVO", loginVO);

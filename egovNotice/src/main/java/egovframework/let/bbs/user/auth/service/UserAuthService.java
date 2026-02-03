@@ -10,18 +10,20 @@ public interface UserAuthService {
 	 * @param userId      - 아이디
 	 * @param rawPassword - 비밀번호(평문)
 	 * @return LoginVO
+	 * @throws Exception
 	 */
-	LoginVO login(String userId, String rawPassword);
+	LoginVO login(String userId, String rawPassword) throws Exception;
 
 	/**
-	 * 로그아웃 처리
+	 * 로그아웃 처리 throws Exception
 	 */
-	void logout();
+	void logout() throws Exception;
 
 	/**
 	 * 현재 로그인 사용자 정보 조회(로그인하지 않은 경우 null 반환)
 	 * 
 	 * @return LoginVO or null
+	 * @throws Exception
 	 */
-	LoginVO meOrNull();
+	LoginVO meOrNull() throws Exception;
 }

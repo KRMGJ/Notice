@@ -25,10 +25,14 @@ public class UserJoinController {
 		return "user/join";
 	}
 
-	/** 회원가입 처리 */
+	/**
+	 * 회원가입 처리
+	 * 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/user/join.do", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Model> join(ComtnUserVO user, Model model) {
+	public ResponseEntity<Model> join(ComtnUserVO user, Model model) throws Exception {
 
 		userJoinService.join(user);
 
@@ -36,10 +40,14 @@ public class UserJoinController {
 		return ResponseEntity.ok(model);
 	}
 
-	/** 아이디 중복 체크 */
+	/**
+	 * 아이디 중복 체크
+	 * 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/user/checkUserId.do", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<Model> checkUserId(@RequestParam("userId") String userId, Model model) {
+	public ResponseEntity<Model> checkUserId(@RequestParam("userId") String userId, Model model) throws Exception {
 
 		boolean duplicated = userJoinService.isDuplicatedUserId(userId);
 		model.addAttribute("duplicated", duplicated);
