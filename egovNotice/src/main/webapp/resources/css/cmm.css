@@ -1,0 +1,9 @@
+.ok {
+	margin-top: 10px;
+	color: #060;
+}
+
+.err {
+	margin-top: 10px;
+	color: #c00;
+}

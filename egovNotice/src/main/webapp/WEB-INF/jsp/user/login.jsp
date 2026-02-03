@@ -8,8 +8,6 @@
 <title>로그인</title>
 
 <link rel="stylesheet" href="<c:url value='/resources/css/login.css'/>" />
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="<c:url value='/resources/js/user/login.js'/>"></script>
 </head>
 <body>
@@ -28,7 +26,7 @@
 
 		<button type="button" id="btnLogin">로그인</button>
 
-		<p class="msg" id="msg"></p>
+		<p id="msg"></p>
 	</div>
 </body>
 </html>

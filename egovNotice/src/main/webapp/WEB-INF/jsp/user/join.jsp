@@ -7,11 +7,10 @@
 <title>회원가입</title>
 
 <link rel="stylesheet" href="<c:url value='/resources/css/join.css'/>" />
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="<c:url value='/resources/js/user/join.js'/>"></script>
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/cmm/header.jsp" %>
 	<div class="join-wrap">
 		<h1>회원가입</h1>
 
@@ -25,7 +24,7 @@
 
 		<button type="button" id="btnJoin">가입하기</button>
 
-		<p class="msg" id="msg"></p>
+		<p id="msg"></p>
 	</div>
 </body>
 </html>
