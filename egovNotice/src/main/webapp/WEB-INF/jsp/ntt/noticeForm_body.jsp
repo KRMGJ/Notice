@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <div class="nt-wrap">
-	<h1>공지사항 등록/수정</h1>
-
 	<div class="nt-box">
 		<c:set var="isEdit" value="${not empty notice and not empty notice.nttId}" />
 
