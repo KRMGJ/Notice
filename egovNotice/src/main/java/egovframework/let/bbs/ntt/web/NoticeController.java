@@ -103,6 +103,16 @@ public class NoticeController {
 		return "ntt/noticeForm";
 	}
 
+	/**
+	 * 공지사항을 등록한다.
+	 * 
+	 * @param vo                 - 등록할 정보가 담긴 VO
+	 * @param files              - 업로드된 파일들
+	 * @param redirectAttributes - 리다이렉트 속성
+	 * @param session            - 세션
+	 * @return 공지사항 목록 View로 리다이렉트
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/notice/insert.do", method = RequestMethod.POST)
 	public String insertNotice(@ModelAttribute("notice") NoticeVO vo,
 			@RequestParam(value = "files", required = false) MultipartFile[] files,
@@ -240,6 +250,14 @@ public class NoticeController {
 		}
 	}
 
+	/**
+	 * 공지사항 수정 화면으로 이동한다.
+	 * 
+	 * @param vo    - 수정할 정보가 담긴 VO
+	 * @param model - 화면모델
+	 * @return 공지사항 수정 View
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/notice/updateNoticeView.do", method = RequestMethod.GET)
 	public String updateForm(@ModelAttribute("notice") NoticeVO vo, Model model) throws Exception {
 		// bbsId가 없으면 임시 기본값
@@ -256,6 +274,17 @@ public class NoticeController {
 		return "ntt/noticeForm";
 	}
 
+	/**
+	 * 공지사항을 수정한다.
+	 * 
+	 * @param vo                 - 수정할 정보가 담긴 VO
+	 * @param files              - 업로드된 파일들
+	 * @param delFileSn          - 삭제할 파일일련번호 배열
+	 * @param redirectAttributes - 리다이렉트 속성
+	 * @param session            - 세션
+	 * @return 공지사항 상세 View로 리다이렉트
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/notice/update.do", method = RequestMethod.POST)
 	public String updateNotice(@ModelAttribute("notice") NoticeVO vo,
 			@RequestParam(value = "files", required = false) MultipartFile[] files,
