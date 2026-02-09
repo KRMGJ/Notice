@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FileMngDAO">
+
+	<!-- COMTNFILE insert -->
+	<insert id="insertFileGroup" parameterType="string">
+		INSERT INTO COMTNFILE (ATCH_FILE_ID, CREAT_DT, USE_AT)
+		VALUES (#{atchFileId}, SYSDATE, 'Y')
+	</insert>
+
+	<!-- 다음 FILE_SN -->
+	<select id="selectNextFileSn" parameterType="string"
+		resultType="int">
+		SELECT NVL(MAX(FILE_SN), 0) + 1
+		FROM COMTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #{atchFileId}
+	</select>
+
+	<!-- COMTNFILEDETAIL insert -->
+	<insert id="insertFileDetail" parameterType="egovframework.let.bbs.cmm.fms.vo.FileVO">
+		INSERT INTO COMTNFILEDETAIL (
+		ATCH_FILE_ID, FILE_SN,
+		FILE_STRE_COURS, STRE_FILE_NM, ORIGNL_FILE_NM,
+		FILE_EXTSN, FILE_CN, FILE_SIZE,
+		USE_AT, FRST_REGIST_PNTTM
+		) VALUES (
+		#{atchFileId}, #{fileSn},
+		#{fileStreCours}, #{streFileNm}, #{orignlFileNm},
+		#{fileExtsn}, #{fileCn}, #{fileSize},
+		'Y', SYSDATE
+		)
+	</insert>
+
+	<!-- 파일 목록 -->
+	<select id="selectFileList" parameterType="string" resultType="egovframework.let.bbs.cmm.fms.vo.FileVO">
+		SELECT
+		ATCH_FILE_ID AS atchFileId,
+		FILE_SN AS fileSn,
+		FILE_STRE_COURS AS fileStreCours,
+		STRE_FILE_NM AS streFileNm,
+		ORIGNL_FILE_NM AS orignlFileNm,
+		FILE_EXTSN AS fileExtsn,
+		FILE_CN AS fileCn,
+		FILE_SIZE AS fileSize,
+		USE_AT AS useAt
+		FROM COMTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #{atchFileId}
+		AND USE_AT = 'Y'
+		ORDER BY FILE_SN ASC
+	</select>
+
+	<!-- 파일 단건 -->
+	<select id="selectFileOne" parameterType="map" resultType="egovframework.let.bbs.cmm.fms.vo.FileVO">
+		SELECT
+		ATCH_FILE_ID AS atchFileId,
+		FILE_SN AS fileSn,
+		FILE_STRE_COURS AS fileStreCours,
+		STRE_FILE_NM AS streFileNm,
+		ORIGNL_FILE_NM AS orignlFileNm,
+		FILE_EXTSN AS fileExtsn,
+		FILE_CN AS fileCn,
+		FILE_SIZE AS fileSize,
+		USE_AT AS useAt
+		FROM COMTNFILEDETAIL
+		WHERE ATCH_FILE_ID = #{atchFileId}
+		AND FILE_SN = #{fileSn}
+	</select>
+
+	<!-- 파일 논리 삭제 -->
+	<update id="updateFileUseAtN" parameterType="map">
+		UPDATE COMTNFILEDETAIL
+		SET USE_AT = 'N'
+		WHERE ATCH_FILE_ID = #{atchFileId}
+		AND FILE_SN = #{fileSn}
+		AND USE_AT = 'Y'
+	</update>
+
+	<!-- 파일 그룹 비활성화 -->
+	<update id="updateFileGroupUseAtN" parameterType="string">
+		UPDATE COMTNFILE
+		SET USE_AT = 'N'
+		WHERE ATCH_FILE_ID = #{atchFileId}
+		AND USE_AT = 'Y'
+	</update>
+
+</mapper>
