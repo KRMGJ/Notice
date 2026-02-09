@@ -12,6 +12,7 @@
 	</div>
 
 	<button type="button" id="btnLogin">로그인</button>
+	<button type="button" id="btnJoin">회원가입</button>
 
 	<p id="msg"></p>
 </div>

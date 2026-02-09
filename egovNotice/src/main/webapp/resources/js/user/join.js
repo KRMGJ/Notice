@@ -38,9 +38,9 @@ $(function() {
 			},
 			error: function(xhr) {
 				if (xhr.responseJSON && xhr.responseJSON.error) {
-					$("#err").text(xhr.responseJSON.error.message);
+					$msg.addClass("err").text(xhr.responseJSON.error.message);
 				} else {
-					$("#err").text("회원가입 실패");
+					$msg.addClass("err").text("회원가입 실패");
 				}
 			}
 		});

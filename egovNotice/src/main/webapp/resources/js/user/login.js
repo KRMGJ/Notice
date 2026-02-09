@@ -32,4 +32,8 @@ $(function() {
 			}
 		});
 	});
+
+	$("#btnJoin").on("click", function() {
+		location.href = "/user/joinView.do";
+	});
 });
