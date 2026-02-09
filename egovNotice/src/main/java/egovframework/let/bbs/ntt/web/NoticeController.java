@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.com.cmm.vo.LoginVO;
 import egovframework.let.bbs.cmm.fms.service.FileMngService;
+import egovframework.let.bbs.cmm.fms.service.impl.FileMngServiceImpl.FileSaveResult;
 import egovframework.let.bbs.cmm.fms.vo.FileVO;
 import egovframework.let.bbs.ntt.service.NoticeService;
 import egovframework.let.bbs.ntt.vo.NoticeVO;
@@ -109,27 +111,39 @@ public class NoticeController {
 		if (vo.getBbsId() == null || vo.getBbsId().isEmpty()) {
 			vo.setBbsId("BBSMSTR_000000000001");
 		}
+
 		if (vo.getNttSj() == null || vo.getNttSj().trim().isEmpty()) {
 			redirectAttributes.addFlashAttribute("msg", "제목은 필수입니다.");
 			return "redirect:/notice/form.do";
 		}
+
 		if (vo.getNttCn() == null || vo.getNttCn().trim().isEmpty()) {
 			redirectAttributes.addFlashAttribute("msg", "내용은 필수입니다.");
 			return "redirect:/notice/form.do";
 		}
+
 		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 		vo.setFrstRegisterId(loginVO.getUniqId());
 
-		if (files != null && files.length > 0 && !files[0].isEmpty()) {
-			String atchFileId = fileMngService.saveFilesNewGroup(files);
-			vo.setAtchFileId(atchFileId);
+		List<String> savedFilePaths = new ArrayList<>();
+
+		try {
+			if (files != null && files.length > 0) {
+				FileSaveResult fsr = fileMngService.saveFilesAppendWithTrace(null, files);
+				vo.setAtchFileId(fsr.getAtchFileId());
+				savedFilePaths.addAll(fsr.getSavedPaths());
+			}
+
+			noticeService.insertNotice(vo);
+
+		} catch (Exception e) {
+			for (String path : savedFilePaths) {
+				fileMngService.deletePhysicalFile(path);
+			}
+			throw e;
 		}
 
-		String nttId = noticeService.insertNotice(vo);
-
-		// 상세로 보내거나 목록으로 보냄
 		redirectAttributes.addFlashAttribute("msg", "등록되었습니다.");
-//		return "redirect:/notice/selectNoticeDetail.do?nttId=" + nttId;
 		return "redirect:/notice/list.do";
 	}
 
@@ -234,7 +248,47 @@ public class NoticeController {
 		}
 		NoticeVO result = noticeService.selectNoticeDetail(vo, false);
 		model.addAttribute("notice", result);
+
+		if (result.getAtchFileId() != null && !result.getAtchFileId().isBlank()) {
+			model.addAttribute("fileList", fileMngService.selectFileList(result.getAtchFileId()));
+		}
+
 		return "ntt/noticeForm";
+	}
+
+	@RequestMapping(value = "/notice/update.do", method = RequestMethod.POST)
+	public String updateNotice(@ModelAttribute("notice") NoticeVO vo,
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam(value = "delFileSn", required = false) int[] delFileSn, RedirectAttributes redirectAttributes,
+			HttpSession session) throws Exception {
+
+		List<String> savedFilePaths = new ArrayList<>();
+
+		try {
+			if (files != null && files.length > 0 && !files[0].isEmpty()) {
+				FileSaveResult fsr = fileMngService.saveFilesAppendWithTrace(vo.getAtchFileId(), files);
+
+				vo.setAtchFileId(fsr.getAtchFileId());
+				savedFilePaths.addAll(fsr.getSavedPaths());
+			}
+
+			if (delFileSn != null && vo.getAtchFileId() != null) {
+				for (int sn : delFileSn) {
+					fileMngService.deleteFile(vo.getAtchFileId(), sn);
+				}
+			}
+
+			noticeService.updateNotice(vo);
+
+			redirectAttributes.addFlashAttribute("msg", "수정되었습니다.");
+			return "redirect:/notice/detail.do?nttId=" + vo.getNttId();
+
+		} catch (Exception e) {
+			for (String path : savedFilePaths) {
+				fileMngService.deletePhysicalFile(path);
+			}
+			throw e;
+		}
 	}
 
 	/**

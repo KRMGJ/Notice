@@ -1,5 +1,6 @@
 package egovframework.let.bbs.cmm.fms.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,9 +138,87 @@ public class FileMngServiceImpl implements FileMngService {
 		}
 	}
 
+	@Override
+	public FileSaveResult saveFilesAppendWithTrace(String atchFileId, MultipartFile[] files) throws Exception {
+
+		FileSaveResult result = new FileSaveResult();
+		List<String> paths = new ArrayList<>();
+
+		if (files == null || files.length == 0) {
+			result.setAtchFileId(atchFileId);
+			result.setSavedPaths(List.of());
+			return result;
+		}
+
+		if (atchFileId == null || atchFileId.isBlank()) {
+			atchFileId = newAtchFileId();
+			int inserted = fileMngDAO.insertFileGroup(atchFileId);
+			if (inserted != 1) {
+				throw new IllegalStateException("파일 그룹 생성 실패");
+			}
+		}
+
+		for (MultipartFile mf : files) {
+			if (mf == null || mf.isEmpty()) {
+				continue;
+			}
+
+			Integer nextSn = fileMngDAO.selectNextFileSn(atchFileId);
+			if (nextSn == null) {
+				nextSn = 1;
+			}
+
+			FileStorageUtil.StoredFile stored = storage.store(mf);
+			paths.add(stored.getFullPath());
+
+			FileVO vo = new FileVO();
+			vo.setAtchFileId(atchFileId);
+			vo.setFileSn(nextSn);
+			vo.setFileStreCours(stored.storedPath);
+			vo.setStreFileNm(stored.storedName);
+			vo.setOrignlFileNm(stored.originalName);
+			vo.setFileExtsn(stored.ext);
+			vo.setFileSize(stored.size);
+			vo.setUseAt("Y");
+
+			fileMngDAO.insertFileDetail(vo);
+		}
+
+		result.setAtchFileId(atchFileId);
+		result.setSavedPaths(paths);
+
+		return result;
+	}
+
+	@Override
+	public void deletePhysicalFile(String fullPath) {
+		storage.delete(fullPath);
+	}
+
 	private String newAtchFileId() {
 		// eGov 스타일처럼 접두어를 원하면 "FILE_" + ... 로 바꿔도 됨
 		return "FILE_" + UUID.randomUUID().toString().replace("-", "").substring(0, 16).toUpperCase();
+	}
+
+	public static class FileSaveResult {
+		private String atchFileId;
+		private List<String> savedPaths;
+
+		public String getAtchFileId() {
+			return atchFileId;
+		}
+
+		public void setAtchFileId(String atchFileId) {
+			this.atchFileId = atchFileId;
+		}
+
+		public List<String> getSavedPaths() {
+			return savedPaths;
+		}
+
+		public void setSavedPaths(List<String> savedPaths) {
+			this.savedPaths = savedPaths;
+		}
 	}
 
 }

@@ -212,17 +212,35 @@
 	
 	<!-- 공지 수정 -->
 	<update id="updateNotice" parameterType="egovframework.let.bbs.ntt.vo.NoticeVO">
-        UPDATE COMTNBBS
-        SET
-            NTT_SJ = #{nttSj},
-            NTT_CN = #{nttCn},
-            NOTICE_AT = #{noticeAt},
-            NOTICE_BGNDE = #{noticeBgnde},
-            NOTICE_ENDDE = #{noticeEndde},
-            LAST_UPDUSR_ID = #{lastUpdusrId},
-            LAST_UPDT_PNTTM = SYSDATE
-        WHERE NTT_ID = #{nttId}
-            AND DEL_AT = 'N'
-            AND USE_AT = 'Y'
+		UPDATE COMTNBBS
+		  <set>
+		      NTT_SJ = #{nttSj},
+		      NTT_CN = #{nttCn},
+		      NOTICE_AT = #{noticeAt},
+		
+		      <choose>
+		          <when test="noticeBgnde != null and noticeBgnde != ''">
+		              NOTICE_BGNDE = #{noticeBgnde},
+		          </when>
+		          <otherwise>
+		              NOTICE_BGNDE = NULL,
+		          </otherwise>
+		      </choose>
+		
+		      <choose>
+		          <when test="noticeEndde != null and noticeEndde != ''">
+		              NOTICE_ENDDE = #{noticeEndde},
+		          </when>
+		          <otherwise>
+		              NOTICE_ENDDE = NULL,
+		          </otherwise>
+		      </choose>
+		
+		      ATCH_FILE_ID = #{atchFileId}
+		  </set>
+		  WHERE NTT_ID = #{nttId}
+		    AND BBS_ID = #{bbsId}
+		    AND DEL_AT = 'N'
+		    AND USE_AT = 'Y'
 	</update>
 </mapper>

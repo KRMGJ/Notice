@@ -2,13 +2,20 @@ package egovframework.let.bbs.cmm.fms.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileStorageUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(FileStorageUtil.class);
+
 	private final String baseDir;
 
 	public FileStorageUtil(String baseDir) {
@@ -66,12 +73,29 @@ public class FileStorageUtil {
 		public final long size;
 		public final String storedPath; // FILE_STRE_COURS
 
+		public String fullPath;
+
+		public String getFullPath() {
+			return storedPath + File.separator + storedName;
+		}
+
 		public StoredFile(String originalName, String storedName, String ext, long size, String storedPath) {
 			this.originalName = originalName;
 			this.storedName = storedName;
 			this.ext = ext;
 			this.size = size;
 			this.storedPath = storedPath;
+		}
+	}
+
+	public void delete(String fullPath) {
+		if (fullPath == null || fullPath.isBlank()) {
+			return;
+		}
+		try {
+			Files.deleteIfExists(Paths.get(fullPath));
+		} catch (IOException e) {
+			log.warn("파일 삭제 실패: {}", fullPath, e);
 		}
 	}
 }

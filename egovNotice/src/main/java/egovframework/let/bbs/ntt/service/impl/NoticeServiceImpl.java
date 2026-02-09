@@ -8,6 +8,7 @@ import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import egovframework.let.bbs.cmm.fms.service.FileMngService;
 import egovframework.let.bbs.ntt.dao.NoticeDAO;
 import egovframework.let.bbs.ntt.service.NoticeService;
 import egovframework.let.bbs.ntt.vo.NoticeVO;
@@ -20,6 +21,9 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Resource(name = "noticeNttIdGnrService")
 	private EgovIdGnrService noticeNttIdGnrService;
+
+	@Resource(name = "fileMngService")
+	private FileMngService fileMngService;
 
 	/**
 	 * 공지사항 목록을 조회한다.
@@ -88,6 +92,7 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void updateNotice(NoticeVO vo) throws Exception {
 		noticeDAO.updateNotice(vo);
 	}

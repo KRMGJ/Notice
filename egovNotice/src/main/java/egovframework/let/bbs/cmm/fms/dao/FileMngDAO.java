@@ -16,8 +16,8 @@ public class FileMngDAO extends EgovAbstractMapper {
 	 * 
 	 * @param atchFileId - 첨부파일ID
 	 */
-	public void insertFileGroup(String atchFileId) {
-		insert("FileMngDAO.insertFileGroup", atchFileId);
+	public int insertFileGroup(String atchFileId) {
+		return insert("FileMngDAO.insertFileGroup", atchFileId);
 	}
 
 	/**

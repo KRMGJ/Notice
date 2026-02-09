@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.let.bbs.cmm.fms.service.impl.FileMngServiceImpl.FileSaveResult;
 import egovframework.let.bbs.cmm.fms.vo.FileVO;
 
 public interface FileMngService {
@@ -61,4 +62,22 @@ public interface FileMngService {
 	 * @throws Exception
 	 */
 	void deleteFileGroup(String atchFileId) throws Exception;
+
+	/**
+	 * 파일그룹에 파일추가 등록 (업로드 이력 저장)
+	 * 
+	 * @param atchFileId - 첨부파일ID
+	 * @param files      - 등록할 파일들
+	 * @return 첨부파일ID
+	 * @throws Exception
+	 */
+	FileSaveResult saveFilesAppendWithTrace(String atchFileId, MultipartFile[] files) throws Exception;
+
+	/**
+	 * 물리적 파일 삭제
+	 * 
+	 * @param fullPath - 파일 전체 경로
+	 */
+	void deletePhysicalFile(String fullPath);
+
 }
