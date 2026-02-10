@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CommentDAO">
+	<select id="selectCommentList" parameterType="string" resultType="egovframework.let.bbs.cmt.vo.CommentVO">
+		SELECT *
+		FROM COMTNBBS_COMMENT
+		WHERE NTT_ID = #{nttId}
+			AND DEL_AT = 'N'
+			AND USE_AT = 'Y'
+		ORDER BY FRST_REGIST_PNTTM ASC
+	</select>
+
+	<insert id="insertComment" parameterType="egovframework.let.bbs.cmt.vo.CommentVO">
+		INSERT INTO COMTNBBS_COMMENT (
+			COMMENT_ID, 
+			NTT_ID, 
+			COMMENT_CN,
+			USE_AT, 
+			DEL_AT, 
+			FRST_REGISTER_ID
+		) VALUES (
+			#{commentId},
+			#{nttId}, 
+			#{commentCn},
+			'Y', 
+			'N', 
+			#{frstRegisterId}
+		)
+	</insert>
+
+	<update id="deleteComment" parameterType="egovframework.let.bbs.cmt.vo.CommentVO">
+		UPDATE COMTNBBS_COMMENT
+		SET 
+			DEL_AT = 'Y'
+		WHERE COMMENT_ID = #{commentId}
+	</update>
+
+</mapper>

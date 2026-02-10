@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import egovframework.com.cmm.vo.LoginVO;
 
-public class Util {
+public class EgovUtil {
 	/**
 	 * 세션 기반 조회수 증가 여부 판단
 	 */
@@ -37,5 +37,20 @@ public class Util {
 		}
 		String encoded = URLEncoder.encode(name, StandardCharsets.UTF_8);
 		return encoded.replaceAll("\\+", "%20");
+	}
+
+	public static String clearXSS(String value) {
+		if (value == null) {
+			return null;
+		}
+
+		String result = value;
+		result = result.replaceAll("<", "&lt;");
+		result = result.replaceAll(">", "&gt;");
+		result = result.replaceAll("\\(", "&#40;");
+		result = result.replaceAll("\\)", "&#41;");
+		result = result.replaceAll("'", "&#39;");
+		result = result.replaceAll("\"", "&quot;");
+		return result;
 	}
 }

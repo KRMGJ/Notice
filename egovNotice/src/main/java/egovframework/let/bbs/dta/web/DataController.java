@@ -22,7 +22,7 @@ import egovframework.com.cmm.vo.LoginVO;
 import egovframework.let.bbs.cmm.fms.service.FileMngService;
 import egovframework.let.bbs.cmm.fms.service.impl.FileMngServiceImpl.FileSaveResult;
 import egovframework.let.bbs.cmm.fms.vo.FileVO;
-import egovframework.let.bbs.cmm.util.Util;
+import egovframework.let.bbs.cmm.util.EgovUtil;
 import egovframework.let.bbs.dta.service.DataService;
 import egovframework.let.bbs.dta.vo.DataVO;
 
@@ -106,7 +106,7 @@ public class DataController {
 	@RequestMapping("/detail.do")
 	public String selectDataDetail(DataVO searchVO, Model model, HttpServletRequest request) throws Exception {
 
-		boolean increase = Util.shouldIncreaseViewCount(request.getSession(), searchVO.getNttId());
+		boolean increase = EgovUtil.shouldIncreaseViewCount(request.getSession(), searchVO.getNttId());
 
 		DataVO data = dataService.selectDataDetail(searchVO, increase);
 
@@ -162,7 +162,7 @@ public class DataController {
 			throw new IllegalStateException("파일이 존재하지 않습니다.");
 		}
 
-		String downloadName = Util.encodeFilename(f.getOrignlFileNm());
+		String downloadName = EgovUtil.encodeFilename(f.getOrignlFileNm());
 
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + downloadName + "\"");

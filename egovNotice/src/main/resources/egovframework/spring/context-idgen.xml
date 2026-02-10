@@ -30,4 +30,18 @@
 		<property name="tableName" value="COMTNBBS" />
 		<property name="blockSize" value="1" />
 	</bean>
+	
+	<bean id="cmtIdStrategy" class="org.egovframe.rte.fdl.idgnr.impl.strategy.EgovIdGnrStrategyImpl">
+		<property name="prefix" value="CMT_" />
+		<property name="fillChar" value="0" />
+		<property name="cipers" value="12" />
+	</bean>
+
+	<bean id="egovCmtIdGnrService" class="org.egovframe.rte.fdl.idgnr.impl.EgovTableIdGnrService">
+		<property name="dataSource" ref="dataSource" />
+		<property name="strategy" ref="cmtIdStrategy" />
+		<property name="table" value="COMTECOPSEQ" />
+		<property name="tableName" value="COMTNBBS_COMMENT" />
+		<property name="blockSize" value="1" />
+	</bean>
 </beans>

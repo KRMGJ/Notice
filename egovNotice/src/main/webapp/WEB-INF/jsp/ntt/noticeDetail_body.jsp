@@ -10,6 +10,7 @@
 	value="${empty searchVO.searchKeyword ? '' : searchVO.searchKeyword}" />
 
 <div class="nt-wrap">
+	<input type="hidden" id="nttId" value="<c:out value='${notice.nttId}'/>" /> 
 	<!-- 상세 박스 -->
 	<div class="nt-box">
 
@@ -89,11 +90,21 @@
 
 				<!-- 논리 삭제 -->
 				<form id="deleteForm" method="post" action="<c:url value='/bbs/notice/deleteNotice.do'/>">
-					<input type="hidden" name="nttId" value="<c:out value='${notice.nttId}'/>" /> 
+					<input type="hidden" name="nttId" id="nttId" value="<c:out value='${notice.nttId}'/>" /> 
 					<input type="hidden" name="bbsId" value="<c:out value='${notice.bbsId}'/>" />
 				</form>
 			</c:if>
 		</div>
 
+	</div>
+	<div class="comment-wrap">
+		<h4 class="comment-title">
+    		댓글 <span id="commentCnt">0</span>
+  		</h4>
+		<div class="comment-write">
+    		<textarea id="commentCn" placeholder="댓글을 입력하세요"></textarea>
+    		<button type="button" id="btnCommentSave">등록</button>
+  		</div>
+		<ul id="commentList" class="comment-list"></ul>
 	</div>
 </div>

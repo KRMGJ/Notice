@@ -24,7 +24,7 @@ import egovframework.com.cmm.vo.LoginVO;
 import egovframework.let.bbs.cmm.fms.service.FileMngService;
 import egovframework.let.bbs.cmm.fms.service.impl.FileMngServiceImpl.FileSaveResult;
 import egovframework.let.bbs.cmm.fms.vo.FileVO;
-import egovframework.let.bbs.cmm.util.Util;
+import egovframework.let.bbs.cmm.util.EgovUtil;
 import egovframework.let.bbs.ntt.service.NoticeService;
 import egovframework.let.bbs.ntt.vo.NoticeVO;
 
@@ -168,7 +168,7 @@ public class NoticeController {
 			Model model) throws Exception {
 
 		// 조회수 세션 중복방지
-		boolean increase = Util.shouldIncreaseViewCount(request.getSession(), searchVO.getNttId());
+		boolean increase = EgovUtil.shouldIncreaseViewCount(request.getSession(), searchVO.getNttId());
 
 		NoticeVO notice = noticeService.selectNoticeDetail(searchVO, increase);
 		if (notice == null) {
@@ -182,7 +182,7 @@ public class NoticeController {
 		}
 
 		// 권한: 일단 "작성자ID == 세션 loginId" 기준(관리자 확장 가능)
-		String loginId = Util.getLoginIdOrNull(request.getSession());
+		String loginId = EgovUtil.getLoginIdOrNull(request.getSession());
 		boolean canEdit = (loginId != null && loginId.equals(notice.getFrstRegisterId()));
 
 		model.addAttribute("notice", notice);
@@ -236,7 +236,7 @@ public class NoticeController {
 			throw new IllegalStateException("파일이 존재하지 않습니다.");
 		}
 
-		String downloadName = Util.encodeFilename(f.getOrignlFileNm());
+		String downloadName = EgovUtil.encodeFilename(f.getOrignlFileNm());
 
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + downloadName + "\"");

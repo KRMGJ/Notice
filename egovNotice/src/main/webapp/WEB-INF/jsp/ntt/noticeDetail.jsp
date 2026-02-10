@@ -6,8 +6,10 @@
 request.setAttribute("pageTitle", "공지사항 상세");
 request.setAttribute("extraHead",
         "<link rel=\"stylesheet\" href=\"" + request.getContextPath()
-        + "/resources/css/notice.css\" /> <script src=\"" + request.getContextPath()
-        + "/resources/js/ntt/detail.js\"></script>");
+        + "/resources/css/notice.css\" /> <link rel=\"stylesheet\" href=\"" + request.getContextPath()
+        + "/resources/css/comment.css\" /> <script src=\"" + request.getContextPath()
+        + "/resources/js/ntt/detail.js\"></script> <script src=\"" + request.getContextPath()
+        + "/resources/js/cmt/comment.js\"></script>");
 request.setAttribute("contentPage", "/WEB-INF/jsp/ntt/noticeDetail_body.jsp");
 %>
 
