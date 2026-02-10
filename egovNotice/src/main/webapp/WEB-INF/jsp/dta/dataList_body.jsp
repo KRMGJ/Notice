@@ -5,11 +5,9 @@
 
 <div class="dta-wrap">
 
-	<form id="searchForm" method="get"
-		action="<c:url value='/bbs/dta/list.do'/>">
+	<form id="searchForm" method="get" action="<c:url value='/bbs/dta/list.do'/>">
 
-		<input type="hidden" name="pageIndex"
-			value="${empty searchVO.pageIndex ? 1 : searchVO.pageIndex}" />
+		<input type="hidden" name="pageIndex" value="${empty searchVO.pageIndex ? 1 : searchVO.pageIndex}" />
 
 		<div class="dta-toolbar">
 			<div class="dta-search">
@@ -20,9 +18,8 @@
 						<c:if test="${searchVO.searchCondition eq '1'}">selected</c:if>>내용</option>
 					<option value="2"
 						<c:if test="${searchVO.searchCondition eq '2'}">selected</c:if>>작성자</option>
-				</select> <input type="text" name="searchKeyword"
-					value="${fn:escapeXml(searchVO.searchKeyword)}"
-					placeholder="검색어 입력" />
+				</select> 
+				<input type="text" name="searchKeyword" value="${fn:escapeXml(searchVO.searchKeyword)}" placeholder="검색어 입력" />
 
 				<button type="submit">검색</button>
 			</div>
@@ -47,8 +44,7 @@
 
 			<c:if test="${empty resultList}">
 				<tr>
-					<td colspan="5" style="text-align: center; color: #666;">등록된
-						자료가 없습니다.</td>
+					<td colspan="5" style="text-align: center; color: #666;">등록된 자료가 없습니다.</td>
 				</tr>
 			</c:if>
 
@@ -59,20 +55,24 @@
 						  * paginationInfo.recordCountPerPage + status.index)}
 					</td>
 
-					<td class="dta-title-td"><a class="dta-title-link"
-						href="<c:url value='/bbs/dta/detail.do'>
-									<c:param name='nttId' value='${row.nttId}'/>
-								</c:url>">
+					<td class="dta-title-td">
+						<a class="dta-title-link" 
+							href="<c:url value='/bbs/dta/detail.do'>
+								  	<c:param name='nttId' value='${row.nttId}'/>
+								  </c:url>">
 							<c:out value="${row.subject}" />
-					</a></td>
+						</a>
+					</td>
 
-					<td class="dta-col-attach"><c:if
-							test="${not empty row.atchFileId}">
+					<td class="dta-col-attach">
+						<c:if test="${not empty row.atchFileId}">
 							<span class="dta-attach">📎</span>
-						</c:if></td>
+						</c:if>
+					</td>
 
-					<td class="dta-col-date"><c:out
-							value="${fn:substring(row.frstRegistPnttm, 0, 10)}" /></td>
+					<td class="dta-col-date">
+						<c:out value="${fn:substring(row.frstRegistPnttm, 0, 10)}" />
+					</td>
 
 					<td class="dta-col-view"><c:out value="${row.viewCnt}" /></td>
 				</tr>
@@ -82,8 +82,7 @@
 	</table>
 
 	<div class="dta-pagination">
-		<ui:pagination paginationInfo="${paginationInfo}"
-			jsFunction="dtaGoPage" />
+		<ui:pagination paginationInfo="${paginationInfo}" jsFunction="dtaGoPage" />
 	</div>
 
 </div>
