@@ -35,6 +35,27 @@ public class CommentServiceImpl implements CommentService {
 	public String insertComment(CommentVO vo) throws Exception {
 		String commentId = egovCmtIdGnrService.getNextStringId();
 		vo.setCommentId(commentId);
+
+		// 부모 댓글이 없는 경우(최상위 댓글)
+		if (vo.getParentId() == null || vo.getParentId().isEmpty()) {
+
+			int maxOrder = commentDAO.selectMaxOrder(vo.getNttId());
+
+			vo.setCommentGroup(commentId);
+			vo.setCommentDepth(0);
+			vo.setCommentOrder(maxOrder + 1);
+
+		} else {
+
+			CommentVO parent = commentDAO.selectComment(vo.getParentId());
+
+			commentDAO.updateOrderPlus(parent);
+
+			vo.setCommentGroup(parent.getCommentGroup());
+			vo.setCommentDepth(parent.getCommentDepth() + 1);
+			vo.setCommentOrder(parent.getCommentOrder() + 1);
+		}
+
 		commentDAO.insertComment(vo);
 		return vo.getCommentId();
 	}

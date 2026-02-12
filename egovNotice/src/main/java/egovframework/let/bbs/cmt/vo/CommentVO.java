@@ -12,6 +12,10 @@ public class CommentVO implements Serializable {
 	private String delAt;
 	private String frstRegisterId;
 	private String frstRegistPnttm;
+	private String parentId; // 부모 댓글 ID
+	private String commentGroup; // 댓글 그룹
+	private Integer commentDepth; // 댓글 깊이
+	private Integer commentOrder; // 댓글 순서
 
 	public String getCommentId() {
 		return commentId;
@@ -71,5 +75,37 @@ public class CommentVO implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getCommentGroup() {
+		return commentGroup;
+	}
+
+	public void setCommentGroup(String commentGroup) {
+		this.commentGroup = commentGroup;
+	}
+
+	public Integer getCommentDepth() {
+		return commentDepth;
+	}
+
+	public void setCommentDepth(Integer commentDepth) {
+		this.commentDepth = commentDepth;
+	}
+
+	public Integer getCommentOrder() {
+		return commentOrder;
+	}
+
+	public void setCommentOrder(Integer commentOrder) {
+		this.commentOrder = commentOrder;
 	}
 }

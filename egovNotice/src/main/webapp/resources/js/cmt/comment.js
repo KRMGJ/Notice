@@ -5,20 +5,29 @@ $(document).ready(function() {
 
 	if (!nttId) return;
 
-	loadComments();
-
+	// 댓글 등록
 	$("#btnCommentSave").on("click", function() {
+
 		const commentCn = $("#commentCn").val().trim();
-		if (commentCn === "") return alert("댓글을 입력하세요.");
+		const parentId = $("#parentId").val();
+
+		if (commentCn === "") {
+			alert("댓글을 입력하세요.");
+			return;
+		}
 
 		$.post("/bbs/cmt/insert.do", {
 			nttId: nttId,
-			commentCn: commentCn
+			commentCn: commentCn,
+			parentId: parentId
 		}, function() {
 			$("#commentCn").val("");
+			$("#parentId").val("");
 			loadComments();
 		});
 	});
+
+	loadComments();
 
 	function loadComments() {
 		$.getJSON("/bbs/cmt/list.do", { nttId: nttId }, function(list) {
@@ -27,6 +36,7 @@ $(document).ready(function() {
 	}
 
 	function drawCommentList(list) {
+
 		let html = "";
 		$("#commentCnt").text(list.length);
 
@@ -36,20 +46,28 @@ $(document).ready(function() {
 		}
 
 		$.each(list, function(i, c) {
-			html += "<li class='comment-item' data-id='" + c.commentId + "'>";
+
+			const depth = c.commentDepth || 0;
+			const margin = depth * 20;
+
+			html += "<li class='comment-item' data-id='" + c.commentId + "' style='margin-left:" + margin + "px'>";
+
 			html += "  <div class='comment-info'>";
 			html += "    <span class='writer'>" + (c.frstRegisterId || "익명") + "</span>";
 			html += "    <span class='date'>" + (c.frstRegistPnttm || "") + "</span>";
 			html += "  </div>";
+
 			html += "  <div class='comment-cn'>" + c.commentCn + "</div>";
-			html += "  <input type='hidden' id='frstRegisterId' value='" + c.frstRegisterId + "'/>";
+
+			html += "  <div class='comment-actions'>";
+			html += "    <button class='btn-reply'>답글</button>";
 
 			if (loginUserId && loginUserId === c.frstRegisterId) {
-				html += "  <div class='comment-actions'>";
 				html += "    <button class='btn-edit'>수정</button>";
 				html += "    <button class='btn-delete'>삭제</button>";
-				html += "  </div>";
 			}
+
+			html += "  </div>";
 
 			html += "</li>";
 		});
@@ -57,47 +75,107 @@ $(document).ready(function() {
 		$("#commentList").html(html);
 	}
 
-	$("#commentList").on("click", ".btn-delete", function() {
-		if (!confirm("댓글을 삭제하시겠습니까?")) return;
+	// 답글 버튼 클릭 → 해당 댓글 아래에 입력창 생성
+	$("#commentList").on("click", ".btn-reply", function() {
 
-		const commentId = $(this).closest(".comment-item").data("id");
+		$(".reply-area").remove(); // 기존 입력창 제거
 
-		$.post("/bbs/cmt/delete.do", { commentId: commentId }, function() {
+		const $item = $(this).closest(".comment-item");
+		const parentId = $item.data("id");
+		const depth = parseInt($item.css("margin-left")) || 0;
+
+		const replyHtml =
+			"<div class='reply-area' style='margin-left:" + (depth + 20) + "px'>" +
+			"  <textarea class='reply-text' placeholder='답글을 입력하세요'></textarea>" +
+			"  <div class='reply-btns'>" +
+			"    <button class='btn-reply-save'>등록</button>" +
+			"    <button class='btn-reply-cancel'>취소</button>" +
+			"  </div>" +
+			"</div>";
+
+		$item.after(replyHtml);
+		$(".reply-area").data("parentId", parentId);
+	});
+
+	// 답글 등록
+	$("#commentList").on("click", ".btn-reply-save", function() {
+
+		const $area = $(this).closest(".reply-area");
+		const parentId = $area.data("parentId");
+		const commentCn = $area.find(".reply-text").val().trim();
+
+		if (commentCn === "") {
+			alert("내용을 입력하세요.");
+			return;
+		}
+
+		$.post("/bbs/cmt/insert.do", {
+			nttId: nttId,
+			commentCn: commentCn,
+			parentId: parentId
+		}, function() {
 			loadComments();
 		});
 	});
 
+	// 답글 취소
+	$("#commentList").on("click", ".btn-reply-cancel", function() {
+		$(".reply-area").remove();
+	});
+
+	// 삭제
+	$("#commentList").on("click", ".btn-delete", function() {
+
+		if (!confirm("댓글을 삭제하시겠습니까?")) return;
+
+		const commentId = $(this).closest(".comment-item").data("id");
+
+		$.post("/bbs/cmt/delete.do", {
+			commentId: commentId,
+			frstRegisterId: loginUserId
+		}, function() {
+			loadComments();
+		});
+	});
+
+	// 수정
 	$("#commentList").on("click", ".btn-edit", function() {
+
 		const $item = $(this).closest(".comment-item");
 		const content = $item.find(".comment-cn").text();
 
 		$item.find(".comment-cn").hide();
-		$(this).parent().hide();
+		$item.find(".comment-actions").hide();
 
 		const editHtml =
 			"<div class='comment-edit-area'>" +
 			"<textarea>" + content + "</textarea>" +
-			"<button class='btn-save'>저장</button> " +
+			"<button class='btn-save'>저장</button>" +
 			"<button class='btn-cancel'>취소</button>" +
 			"</div>";
 
 		$item.append(editHtml);
 	});
 
+	// 수정 저장
 	$("#commentList").on("click", ".btn-save", function() {
+
+		console.log("저장 클릭");
+
 		const $item = $(this).closest(".comment-item");
 		const commentId = $item.data("id");
 		const newContent = $item.find("textarea").val().trim();
-		const frstRegisterId = $item.find("#frstRegisterId").val();
 
-		if (newContent === "") return alert("내용을 입력하세요.");
+		if (newContent === "") {
+			alert("내용을 입력하세요.");
+			return;
+		}
 
 		$.post("/bbs/cmt/update.do", {
 			commentId: commentId,
 			commentCn: newContent,
-			frstRegisterId: frstRegisterId
-		},
-		function() {
+			frstRegisterId: loginUserId
+		}, function() {
 			loadComments();
 		});
 	});

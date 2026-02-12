@@ -7,24 +7,34 @@
 		WHERE NTT_ID = #{nttId}
 			AND DEL_AT = 'N'
 			AND USE_AT = 'Y'
-		ORDER BY FRST_REGIST_PNTTM ASC
+		ORDER BY COMMENT_GROUP DESC, COMMENT_ORDER ASC
 	</select>
 
 	<insert id="insertComment" parameterType="egovframework.let.bbs.cmt.vo.CommentVO">
 		INSERT INTO COMTNBBS_COMMENT (
-			COMMENT_ID, 
-			NTT_ID, 
-			COMMENT_CN,
-			USE_AT, 
-			DEL_AT, 
-			FRST_REGISTER_ID
+	        COMMENT_ID,
+	        NTT_ID,
+	        PARENT_ID,
+	        COMMENT_GROUP,
+	        COMMENT_DEPTH,
+	        COMMENT_ORDER,
+	        COMMENT_CN,
+	        USE_AT,
+	        DEL_AT,
+	        FRST_REGISTER_ID,
+	        FRST_REGIST_PNTTM
 		) VALUES (
-			#{commentId},
-			#{nttId}, 
-			#{commentCn},
-			'Y', 
-			'N', 
-			#{frstRegisterId}
+	        #{commentId},
+	        #{nttId},
+	        #{parentId},
+	        #{commentGroup},
+	        #{commentDepth},
+	        #{commentOrder},
+	        #{commentCn},
+	        'Y',
+	        'N',
+	        #{frstRegisterId},
+	        SYSDATE
 		)
 	</insert>
 
@@ -41,5 +51,26 @@
             COMMENT_CN = #{commentCn}
         WHERE COMMENT_ID = #{commentId}
 	</update>
+	
+	<!-- 댓글 상세 조회 -->
+	<select id="selectComment" parameterType="string" resultType="egovframework.let.bbs.cmt.vo.CommentVO">
+    	SELECT *
+	    FROM COMTNBBS_COMMENT
+	    WHERE COMMENT_ID = #{commentId}
+	</select>
+	
+	<!-- 댓글 순서 증가 -->
+	<update id="updateOrderPlus" parameterType="egovframework.let.bbs.cmt.vo.CommentVO">
+	    UPDATE COMTNBBS_COMMENT
+	    SET COMMENT_ORDER = COMMENT_ORDER + 1
+	    WHERE COMMENT_GROUP = #{commentGroup}
+	      AND COMMENT_ORDER > #{commentOrder}
+	</update>
+	
+	<select id="selectMaxOrder" parameterType="egovframework.let.bbs.cmt.vo.CommentVO" resultType="int">
+        SELECT NVL(MAX(COMMENT_ORDER), 0)
+        FROM COMTNBBS_COMMENT
+        WHERE NTT_ID = #{nttId}
+    </select>
 
 </mapper>

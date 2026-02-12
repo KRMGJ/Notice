@@ -103,6 +103,7 @@
     		댓글 <span id="commentCnt">0</span>
   		</h4>
 		<div class="comment-write">
+			<input type="hidden" id="parentId" value="" />
     		<textarea id="commentCn" placeholder="댓글을 입력하세요"></textarea>
     		<button type="button" id="btnCommentSave">등록</button>
   		</div>

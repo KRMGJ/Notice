@@ -46,4 +46,33 @@ public class CommentDAO extends EgovAbstractMapper {
 	public void updateComment(CommentVO vo) {
 		update("CommentDAO.updateComment", vo);
 	}
+
+	/**
+	 * 부모 댓글 조회
+	 * 
+	 * @param parentId - 부모 댓글 ID
+	 * @return 부모 댓글 정보가 담긴 CommentVO
+	 */
+	public CommentVO selectComment(String parentId) {
+		return selectOne("CommentDAO.selectComment", parentId);
+	}
+
+	/**
+	 * 댓글 순서 업데이트 (기존 댓글들 +1)
+	 * 
+	 * @param parent - 부모 댓글 정보가 담긴 CommentVO
+	 */
+	public void updateOrderPlus(CommentVO parent) {
+		update("CommentDAO.updateOrderPlus", parent);
+	}
+
+	/**
+	 * 최대 댓글 순서 조회
+	 * 
+	 * @param nttId - 댓글이 등록된 게시물ID
+	 * @return 최대 댓글 순서
+	 */
+	public int selectMaxOrder(String nttId) {
+		return selectOne("CommentDAO.selectMaxOrder", nttId);
+	}
 }

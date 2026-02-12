@@ -17,7 +17,7 @@
 
 .comment-write textarea {
 	width: 100%;
-	height: 80px;
+	height: 50px;
 	padding: 8px;
 	box-sizing: border-box;
 	resize: none;
@@ -99,4 +99,54 @@
 	height: 70px;
 	margin-top: 6px;
 	box-sizing: border-box;
+}
+
+.comment-item .btn-reply {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 12px;
+	color: #888;
+	cursor: pointer;
+}
+
+.comment-item .btn-reply:hover {
+	text-decoration: underline;
+}
+
+.comment-item[style*="margin-left"] {
+	border-left: 2px solid #f0f0f0;
+	padding-left: 10px;
+}
+
+.reply-area {
+	margin-top: 8px;
+}
+
+.reply-area textarea {
+	width: 100%;
+	height: 60px;
+	padding: 6px;
+	box-sizing: border-box;
+	resize: none;
+	font-size: 13px;
+}
+
+.reply-btns {
+	margin-top: 6px;
+	display: flex;
+	gap: 8px;
+}
+
+.reply-btns button {
+	background: #1a73e8;
+	color: #fff;
+	border: none;
+	padding: 5px 12px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.reply-btns button:last-child {
+	background: #888;
 }
