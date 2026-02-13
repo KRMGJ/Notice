@@ -44,7 +44,7 @@ public class CommentController {
 
 		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
-		vo.setFrstRegisterId(loginVO.getUniqId());
+		vo.setFrstRegisterId(loginVO.getUniqId() == null ? "user1" : loginVO.getUniqId());
 
 		commentService.insertComment(vo);
 		return "OK";

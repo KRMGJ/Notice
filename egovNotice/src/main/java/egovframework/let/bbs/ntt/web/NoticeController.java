@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.cmm.vo.LoginVO;
 import egovframework.let.bbs.cmm.fms.service.FileMngService;
 import egovframework.let.bbs.cmm.fms.service.impl.FileMngServiceImpl.FileSaveResult;
@@ -347,8 +348,8 @@ public class NoticeController {
 	public String insertReply(@ModelAttribute NoticeVO vo, HttpSession session, RedirectAttributes redirectAttributes)
 			throws Exception {
 
-		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
-		vo.setFrstRegisterId(loginVO.getUniqId());
+		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		vo.setFrstRegisterId(loginVO.getUniqId() == null ? "user1" : loginVO.getUniqId());
 		vo.setBbsId(NOTICE_BBS_ID);
 
 		noticeService.insertReply(vo);

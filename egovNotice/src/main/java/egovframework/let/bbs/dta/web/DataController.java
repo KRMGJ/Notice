@@ -77,7 +77,7 @@ public class DataController {
 			@RequestParam(value = "files", required = false) MultipartFile[] files, Model model) throws Exception {
 
 		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-		vo.setFrstRegisterId(loginVO.getUniqId());
+		vo.setFrstRegisterId(loginVO.getUniqId() == null ? "user1" : loginVO.getUniqId());
 
 		vo.setBbsId(DATA_BBS_ID);
 
