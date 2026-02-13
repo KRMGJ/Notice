@@ -187,3 +187,45 @@ textarea {
 .nt-files ul li a:hover {
 	text-decoration: underline;
 }
+
+.nt-reply-row {
+	background: #fafafa;
+}
+
+.reply-box {
+	padding: 6px 0;
+	font-size: 14px;
+}
+
+.reply-arrow {
+	color: #999;
+	margin-right: 6px;
+}
+
+.reply-content {
+	margin-right: 10px;
+}
+
+.reply-date {
+	color: #aaa;
+	font-size: 12px;
+}
+
+.deleted-parent-msg {
+	color: #999;
+	font-style: italic;
+}
+
+.deleted-text {
+	color: #999;
+	font-style: italic;
+}
+
+.toggle-icon {
+	margin-right: 5px;
+	color: #666;
+}
+
+.parent-title:hover {
+	text-decoration: underline;
+}

@@ -90,6 +90,15 @@ public class NoticeDAO extends EgovAbstractMapper {
 	 */
 	public void deleteNoticeList(List<String> nttIdList) {
 		delete("NoticeDAO.deleteNoticeList", nttIdList);
+	}
 
+	/**
+	 * 공지사항 트리 목록을 조회한다.
+	 * 
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 공지사항 트리 목록
+	 */
+	public List<NoticeVO> selectNoticeTreeList(NoticeVO searchVO) {
+		return selectList("NoticeDAO.selectNoticeTreeList", searchVO);
 	}
 }

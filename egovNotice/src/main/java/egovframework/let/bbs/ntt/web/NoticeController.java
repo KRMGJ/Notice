@@ -318,6 +318,13 @@ public class NoticeController {
 		}
 	}
 
+	/**
+	 * 공지사항을 삭제한다.
+	 * 
+	 * @param nttIdList - 삭제할 공지사항 ID 리스트
+	 * @return ResponseEntity
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/deleteList.do", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> deleteNoticeList(@RequestParam("nttIdList") List<String> nttIdList) throws Exception {
@@ -325,5 +332,28 @@ public class NoticeController {
 		noticeService.deleteNoticeList(nttIdList);
 
 		return ResponseEntity.ok().build();
+	}
+
+	/**
+	 * 공지사항 답변을 등록한다.
+	 * 
+	 * @param vo                 - 등록할 정보가 담긴 VO
+	 * @param session            - 세션
+	 * @param redirectAttributes - 리다이렉트 속성
+	 * @return 공지사항 목록 View로 리다이렉트
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/reply.do", method = RequestMethod.POST)
+	public String insertReply(@ModelAttribute NoticeVO vo, HttpSession session, RedirectAttributes redirectAttributes)
+			throws Exception {
+
+		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
+		vo.setFrstRegisterId(loginVO.getUniqId());
+		vo.setBbsId(NOTICE_BBS_ID);
+
+		noticeService.insertReply(vo);
+
+		redirectAttributes.addFlashAttribute("msg", "답글이 등록되었습니다.");
+		return "redirect:/bbs/notice/list.do";
 	}
 }

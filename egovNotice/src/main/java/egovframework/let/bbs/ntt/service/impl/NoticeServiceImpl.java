@@ -30,7 +30,22 @@ public class NoticeServiceImpl implements NoticeService {
 	 */
 	@Override
 	public List<NoticeVO> selectNoticeList(NoticeVO searchVO) throws Exception {
-		return noticeDAO.selectNoticeList(searchVO);
+		List<NoticeVO> list = noticeDAO.selectNoticeTreeList(searchVO);
+
+		for (NoticeVO vo : list) {
+
+			// 부모가 삭제된 경우 표시
+			if ("Y".equals(vo.getParentDelAt())) {
+				vo.setSubject("[삭제된 게시물의 답글] " + vo.getSubject());
+			}
+
+			// 본인이 삭제된 경우 목록에서 제거
+			if ("Y".equals(vo.getDelAt())) {
+				vo.setHidden(true);
+			}
+		}
+
+		return list;
 	}
 
 	/**
@@ -100,10 +115,26 @@ public class NoticeServiceImpl implements NoticeService {
 		noticeDAO.updateNotice(vo);
 	}
 
+	/**
+	 * 공지사항을 삭제한다.
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteNoticeList(List<String> nttIdList) throws Exception {
 
 		noticeDAO.deleteNoticeList(nttIdList);
+	}
+
+	/**
+	 * 공지사항 답변을 등록한다.
+	 */
+	@Override
+	public void insertReply(NoticeVO vo) throws Exception {
+
+		vo.setNttId(egovNttIdGnrService.getNextStringId());
+		vo.setPinnedAt("N");
+		vo.setUseAt("Y");
+		vo.setDelAt("N");
+		noticeDAO.insertNotice(vo);
 	}
 }

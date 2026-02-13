@@ -52,3 +52,59 @@ $(document).ready(function() {
 	});
 
 });
+
+$(function() {
+
+	$(document).on("click", ".parent-title", function(e) {
+
+		if ($(e.target).is("a")) return;
+
+		const rootId = $(this).data("root");
+
+		const children = $(".nt-reply-row[data-root='" + rootId + "']");
+
+		const icon = $(this).find(".toggle-icon");
+
+		if (children.first().is(":visible")) {
+			children.hide();
+			icon.text("▶");
+		} else {
+			children.show();
+			icon.text("▼");
+		}
+
+	});
+
+});
+
+
+
+$(function() {
+
+	$(document).on("click", ".btnReply", function(e) {
+
+		e.stopPropagation();
+
+		const parentId = $(this).data("parent");
+		const row = $(this).closest("tr");
+
+		let targetRow = row;
+		if (row.next().hasClass("nt-content")) {
+			targetRow = row.next();
+		}
+
+		$("#parntNttId").val(parentId);
+
+		$("#replyRow")
+			.insertAfter(targetRow)
+			.show();
+
+	});
+
+	$("#btnCancelReply").on("click", function() {
+		$("#replyRow").hide();
+	});
+
+});
+
+

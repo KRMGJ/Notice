@@ -37,7 +37,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th><input type="checkbox" id="checkAll"/></th>
+				<th style="width: 40px;"><input type="checkbox" id="checkAll"/></th>
 				<th class="nt-col-no">번호</th>
 				<th>제목</th>
 				<th class="nt-col-date">등록일</th>
@@ -50,7 +50,7 @@
 			<c:if test="${not empty pinnedList}">
 				<c:forEach var="n" items="${pinnedList}">
 					<tr class="nt-notice">
-						<td>
+						<td style="display: flex; justify-content: center; align-items: center;">
 							<input type="checkbox" name="nttId" value="${n.nttId}" />
 						</td>
 						<td class="nt-col-no">공지</td>
@@ -72,23 +72,85 @@
 			<c:choose>
 				<c:when test="${not empty noticeList}">
 					<c:forEach var="n" items="${noticeList}">
-						<tr>
-							<td>
-								<input type="checkbox" name="nttId" value="${n.nttId}" />
-							</td>
-							<td class="nt-col-no"><c:out value="${n.nttId}" /></td>
-							<td>
-								<a href="<c:url value='/bbs/notice/selectNoticeDetail.do'><c:param name='nttId' value='${n.nttId}'/></c:url>">
-									<c:out value="${n.subject}" />
-								</a> 
-								<c:if test="${not empty n.atchFileId}">
-									<span class="muted">[첨부]</span>
-								</c:if>
-							</td>
-							<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
-							<td class="nt-col-view"><c:out value="${n.viewCnt}" /></td>
-						</tr>
+					    <c:if test="${n.nttLevel == 1}">
+					        <tr class="nt-row" data-root="${n.rootId}" data-id="${n.nttId}">
+					            <td>
+					                <input type="checkbox" name="nttId" value="${n.nttId}" />
+					            </td>
+					            <td>${n.nttId}</td>
+					            <td>
+									<c:choose>
+						                <c:when test="${n.delAt == 'Y'}">
+						                    <span class="deleted-text">
+						                        삭제된 게시글입니다.
+						                    </span>
+						                </c:when>
+						                <c:otherwise>
+								            <span class="parent-title" data-root="${n.rootId}" style="cursor:pointer;">
+								                <c:if test="${n.hasChild == 'Y'}">
+								                    <span class="toggle-icon">▶</span>
+								                </c:if>
+								                <a href="<c:url value='/bbs/notice/selectNoticeDetail.do'>
+								                         <c:param name='nttId' value='${n.nttId}'/>
+								                         </c:url>">
+								                    ${n.subject}
+								                </a>
+								            </span>
+						                    <button type="button" class="btnReply" data-parent="${n.nttId}">
+						                        답글
+						                    </button>
+						                </c:otherwise>
+						            </c:choose>
+					            </td>
+								<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
+								<td class="nt-col-view"><c:out value="${n.viewCnt}" /></td>
+					        </tr>
+					    </c:if>
+					    <c:if test="${n.nttLevel > 1}">
+					        <tr class="nt-reply-row" data-root="${n.rootId}" data-id="${n.nttId}" style="display:none;">
+					            <td></td>
+					            <td></td>
+					            <td colspan="3">
+					                <div class="reply-box" style="margin-left:${(n.nttLevel - 1) * 25}px;">
+					                    <span class="reply-arrow">▶</span>
+					                     <c:choose>
+						                    <c:when test="${n.rootDelAt  == 'Y'}">
+						                        <span class="deleted-parent-msg">
+						                            삭제된 게시물의 답글입니다.
+						                        </span>
+						                    </c:when>
+						                    <c:otherwise>
+						                        <span class="reply-content">
+						                            ${n.content}
+						                        </span>
+          					                    <span class="reply-date">(${n.frstRegistPnttm})</span>
+					                    		<button type="button" class="btnReply" data-parent="${n.nttId}">
+					                        		답글
+					                    		</button>
+						                    </c:otherwise>
+						                </c:choose>
+
+					                </div>
+					            </td>
+					        </tr>
+					    </c:if>
 					</c:forEach>
+
+ 					<tr id="replyRow" style="display:none;">
+            			<td colspan="5">
+                			<form id="replyForm" method="post" action="<c:url value='/bbs/notice/reply.do'/>">
+
+			                    <input type="hidden" name="parntNttId" id="parntNttId"/>
+			                    <input type="hidden" name="bbsId" value="${searchVO.bbsId}"/>
+			
+			                    <input type="text" name="subject" placeholder="제목"/>
+			                    <textarea name="content" placeholder="내용"></textarea>
+			                    <button type="submit">등록</button>
+								<button type="button" id="btnCancelReply">취소</button>
+			                </form>
+			            </td>
+			        </tr>
+
 				</c:when>
 				<c:otherwise>
 					<tr>
