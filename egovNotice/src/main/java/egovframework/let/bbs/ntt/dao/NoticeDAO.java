@@ -1,6 +1,7 @@
 package egovframework.let.bbs.ntt.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.EgovAbstractMapper;
 import org.springframework.stereotype.Repository;
@@ -100,5 +101,35 @@ public class NoticeDAO extends EgovAbstractMapper {
 	 */
 	public List<NoticeVO> selectNoticeTreeList(NoticeVO searchVO) {
 		return selectList("NoticeDAO.selectNoticeTreeList", searchVO);
+	}
+
+	/**
+	 * 공지사항 부모 트리 목록을 조회한다.
+	 * 
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 공지사항 부모 트리 목록
+	 */
+	public List<NoticeVO> selectNoticeParentList(NoticeVO searchVO) {
+		return selectList("NoticeDAO.selectNoticeParentList", searchVO);
+	}
+
+	/**
+	 * 공지사항 자식 트리 목록을 조회한다.
+	 * 
+	 * @param paramMap - 조회할 정보가 담긴 Map
+	 * @return 공지사항 자식 트리 목록
+	 */
+	public List<NoticeVO> selectNoticeChildTreeList(Map<String, Object> paramMap) {
+		return selectList("NoticeDAO.selectNoticeChildTreeList", paramMap);
+	}
+
+	/**
+	 * 공지사항 부모 트리 목록 총 갯수를 조회한다.
+	 * 
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 공지사항 부모 트리 목록 총 갯수
+	 */
+	public int selectNoticeParentListTotCnt(NoticeVO searchVO) {
+		return selectOne("NoticeDAO.selectNoticeParentListTotCnt", searchVO);
 	}
 }

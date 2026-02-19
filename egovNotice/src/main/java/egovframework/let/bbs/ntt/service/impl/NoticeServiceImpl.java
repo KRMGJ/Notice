@@ -1,6 +1,9 @@
 package egovframework.let.bbs.ntt.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -12,7 +15,9 @@ import egovframework.let.bbs.cmm.fms.service.FileMngService;
 import egovframework.let.bbs.ntt.dao.NoticeDAO;
 import egovframework.let.bbs.ntt.service.NoticeService;
 import egovframework.let.bbs.ntt.vo.NoticeVO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService {
 
@@ -30,22 +35,38 @@ public class NoticeServiceImpl implements NoticeService {
 	 */
 	@Override
 	public List<NoticeVO> selectNoticeList(NoticeVO searchVO) throws Exception {
-		List<NoticeVO> list = noticeDAO.selectNoticeTreeList(searchVO);
+//		List<NoticeVO> list = noticeDAO.selectNoticeTreeList(searchVO);
+//
+//		for (NoticeVO vo : list) {
+//
+//			// 부모가 삭제된 경우 표시
+//			if ("Y".equals(vo.getParentDelAt())) {
+//				vo.setSubject("[삭제된 게시물의 답글] " + vo.getSubject());
+//			}
+//
+//			// 본인이 삭제된 경우 목록에서 제거
+//			if ("Y".equals(vo.getDelAt())) {
+//				vo.setHidden(true);
+//			}
+//		}
+//
+//		return list;
 
-		for (NoticeVO vo : list) {
+		List<NoticeVO> parentList = noticeDAO.selectNoticeParentList(searchVO);
 
-			// 부모가 삭제된 경우 표시
-			if ("Y".equals(vo.getParentDelAt())) {
-				vo.setSubject("[삭제된 게시물의 답글] " + vo.getSubject());
-			}
-
-			// 본인이 삭제된 경우 목록에서 제거
-			if ("Y".equals(vo.getDelAt())) {
-				vo.setHidden(true);
-			}
+		if (parentList.isEmpty()) {
+			return parentList;
 		}
 
-		return list;
+		List<String> parentIdList = parentList.stream().map(NoticeVO::getNttId).collect(Collectors.toList());
+
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("bbsId", searchVO.getBbsId());
+		paramMap.put("parentIdList", parentIdList);
+
+		List<NoticeVO> treeList = noticeDAO.selectNoticeChildTreeList(paramMap);
+
+		return treeList;
 	}
 
 	/**
@@ -136,5 +157,17 @@ public class NoticeServiceImpl implements NoticeService {
 		vo.setUseAt("Y");
 		vo.setDelAt("N");
 		noticeDAO.insertNotice(vo);
+	}
+
+	/**
+	 * 공지사항 부모 총 갯수를 조회한다.
+	 * 
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 공지사항 부모 총 갯수
+	 * @throws Exception
+	 */
+	@Override
+	public int selectNoticeParentListTotCnt(NoticeVO searchVO) throws Exception {
+		return noticeDAO.selectNoticeParentListTotCnt(searchVO);
 	}
 }

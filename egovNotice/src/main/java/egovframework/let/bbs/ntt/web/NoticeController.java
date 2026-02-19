@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,38 +52,43 @@ public class NoticeController {
 	 */
 	@RequestMapping("/list.do")
 	public String noticeList(NoticeVO searchVO, Model model) throws Exception {
+
 		searchVO.setBbsId(NOTICE_BBS_ID);
 
-		if (searchVO.getPageIndex() < 1) {
-			searchVO.setPageIndex(1);
+		int pageIndex = searchVO.getPageIndex() < 1 ? 1 : searchVO.getPageIndex();
+		int pageUnit = searchVO.getPageUnit() < 1 ? 10 : searchVO.getPageUnit();
+		int pageSize = searchVO.getPageSize() < 1 ? 10 : searchVO.getPageSize();
+
+		searchVO.setPageIndex(pageIndex);
+		searchVO.setPageUnit(pageUnit);
+		searchVO.setPageSize(pageSize);
+
+		int totalCount = noticeService.selectNoticeParentListTotCnt(searchVO);
+
+		int totalPageCount = (int) Math.ceil((double) totalCount / pageUnit);
+
+		int startPage = ((pageIndex - 1) / pageSize) * pageSize + 1;
+		int endPage = startPage + pageSize - 1;
+
+		if (endPage > totalPageCount) {
+			endPage = totalPageCount;
 		}
 
-		if (searchVO.getPageUnit() < 1) {
-			searchVO.setPageUnit(10);
-		}
-
-		if (searchVO.getPageSize() < 1) {
-			searchVO.setPageSize(10);
-		}
-
-		PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
-
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		int firstIndex = (pageIndex - 1) * pageUnit;
+		searchVO.setFirstIndex(firstIndex);
+		searchVO.setRecordCountPerPage(pageUnit);
 
 		List<NoticeVO> noticeList = noticeService.selectNoticeList(searchVO);
 		List<NoticeVO> pinnedList = noticeService.selectNoticePinnedList(searchVO);
 
-		int totCnt = noticeService.selectNoticeListTotCnt(searchVO);
-		paginationInfo.setTotalRecordCount(totCnt);
-
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("pinnedList", pinnedList);
-		model.addAttribute("paginationInfo", paginationInfo);
+
 		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 
 		return "ntt/noticeList";
 	}
@@ -328,7 +332,13 @@ public class NoticeController {
 	 */
 	@RequestMapping(value = "/deleteList.do", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> deleteNoticeList(@RequestParam("nttIdList") List<String> nttIdList) throws Exception {
+	public ResponseEntity<?> deleteNoticeList(
+			@RequestParam(value = "nttIdList", required = false) List<String> nttIdList,
+			@RequestParam(value = "nttId", required = false) String nttId) throws Exception {
+
+		if ((nttIdList == null || nttIdList.isEmpty()) && nttId != null && !nttId.isBlank()) {
+			nttIdList = List.of(nttId);
+		}
 
 		noticeService.deleteNoticeList(nttIdList);
 

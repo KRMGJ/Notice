@@ -229,3 +229,41 @@ textarea {
 .parent-title:hover {
 	text-decoration: underline;
 }
+
+.pagination {
+	margin: 40px 0;
+	text-align: center;
+	font-size: 0;
+}
+
+.pagination a, .pagination strong {
+	display: inline-block;
+	min-width: 36px;
+	height: 36px;
+	line-height: 34px;
+	margin: 0 3px;
+	padding: 0 10px;
+	font-size: 14px;
+	border: 1px solid #c9c9c9;
+	background: #fff;
+	color: #333;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+.pagination a:hover {
+	background: #f1f4f8;
+	border-color: #9aa7b2;
+}
+
+.pagination strong {
+	background: #005ea6;
+	border: 1px solid #005ea6;
+	color: #fff;
+	font-weight: 600;
+}
+
+.pagination a:first-child, .pagination a:last-child {
+	padding: 0 14px;
+	font-weight: 500;
+}

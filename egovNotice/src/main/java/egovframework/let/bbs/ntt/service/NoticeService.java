@@ -82,4 +82,13 @@ public interface NoticeService {
 	 * @throws Exception
 	 */
 	void insertReply(NoticeVO vo) throws Exception;
+
+	/**
+	 * 공지사항 부모 총 갯수를 조회한다.
+	 * 
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 공지사항 부모 총 갯수
+	 * @throws Exception
+	 */
+	int selectNoticeParentListTotCnt(NoticeVO searchVO) throws Exception;
 }

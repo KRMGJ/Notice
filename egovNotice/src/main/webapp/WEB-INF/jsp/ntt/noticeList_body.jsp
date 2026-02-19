@@ -129,18 +129,30 @@
 						                        </span>
 						                    </c:when>
 						                    <c:otherwise>
-						                    	<span class="parent-title" data-root="${n.rootId}" style="cursor:pointer;">
-       											<c:url var="detailUrl" value="/bbs/notice/selectNoticeDetail.do">
-													<c:param name="nttId" value="${n.nttId}"/>
-												</c:url>
-												<a href="${detailUrl}" class="reply-content">
-													${n.subject}
-												</a>
-					       	                    <span class="reply-date">(${n.frstRegistPnttm})</span>
-												<button type="button" class="btnReply" data-parent="${n.nttId}">
-					                        		답글
-												</button>
-												</span>
+						                    	<c:choose>
+							                    	<c:when test="${n.delAt == 'Y'}">
+	                                            		<span class="deleted-text">
+	                                            			삭제된 게시글입니다.
+	                                            		</span>
+	                                           		</c:when>
+	                                           		<c:otherwise>
+								                    	<span class="parent-title" data-root="${n.rootId}" style="cursor:pointer;">
+			       											<c:url var="detailUrl" value="/bbs/notice/selectNoticeDetail.do">
+																<c:param name="nttId" value="${n.nttId}"/>
+															</c:url>
+															<a href="${detailUrl}" class="reply-content">
+																${n.subject}
+															</a>
+														</span>
+														<span class="reply-date">(${n.frstRegistPnttm})</span>
+														<button type="button" class="btnReply" data-parent="${n.nttId}">
+							                        		답글
+														</button>
+														<button type="button" class="btnDeleteReply" data-id="${n.nttId}">
+		                                            		삭제
+		                                         		</button>
+	                                         		</c:otherwise>
+                                         		</c:choose>
 						                    </c:otherwise>
 						                </c:choose>
 
@@ -174,8 +186,24 @@
         <button type="button" id="btnDelete">선택삭제</button>
     </div>
 	<div class="pagination">
-		<c:if test="${not empty paginationInfo}">
-			<ui:pagination paginationInfo="${paginationInfo}" type="text" jsFunction="fn_egov_link_page" />
-		</c:if>
+	    <c:if test="${totalPageCount > 0}">
+	        <c:if test="${startPage > 1}">
+	            <a href="javascript:link_page(${startPage - 1})">이전</a>
+	        </c:if>
+	        <c:forEach var="i" begin="${startPage}" end="${endPage}">
+	            <c:choose>
+	                <c:when test="${i == searchVO.pageIndex}">
+	                    <strong>${i}</strong>
+	                </c:when>
+	                <c:otherwise>
+	                    <a href="javascript:link_page(${i})">${i}</a>
+	                </c:otherwise>
+	            </c:choose>
+	        </c:forEach>
+	        <c:if test="${endPage < totalPageCount}">
+	            <a href="javascript:link_page(${endPage + 1})">다음</a>
+	        </c:if>
+	
+	    </c:if>
 	</div>
 </div>

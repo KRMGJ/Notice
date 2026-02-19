@@ -1,4 +1,4 @@
-function fn_egov_link_page(pageNo) {
+function link_page(pageNo) {
 	$("#searchForm input[name='pageIndex']").val(pageNo);
 	$("#searchForm").attr("action", "/bbs/notice/list.do").submit();
 }
@@ -51,6 +51,25 @@ $(document).ready(function() {
 
 	});
 
+	$(".btnDeleteReply").on("click", function() {
+		var nttId = $(this).data("id");
+		if (!confirm("댓글을 삭제하시겠습니까?")) {
+			return;
+		}
+
+		$.ajax({
+			url: "/bbs/notice/deleteList.do",
+			type: "POST",
+			data: { nttId: nttId },
+			success: function() {
+				alert("댓글이 삭제되었습니다.");
+				location.reload();
+			},
+			error: function() {
+				alert("댓글 삭제 중 오류가 발생했습니다.");
+			}
+		});
+	});
 });
 
 $(function() {
