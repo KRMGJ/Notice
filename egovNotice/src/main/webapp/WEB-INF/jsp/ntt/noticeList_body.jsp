@@ -55,7 +55,10 @@
 						</td>
 						<td class="nt-col-no">공지</td>
 						<td>
-							<a href="<c:url value='/bbs/notice/selectNoticeDetail.do'><c:param name='nttId' value='${n.nttId}'/></c:url>">
+							<c:url var="detailUrl" value="/bbs/notice/selectNoticeDetail.do">
+								<c:param name="nttId" value="${n.nttId}" />
+							</c:url>
+							<a href="${detailUrl}">
 								<c:out value="${n.subject}" />
 							</a> 
 							<c:if test="${not empty n.atchFileId}">
@@ -79,10 +82,15 @@
 					            </td>
 					            <td>${n.nttId}</td>
 					            <td>
-									<c:choose>
+								<c:choose>
 						                <c:when test="${n.delAt == 'Y'}">
-						                    <span class="deleted-text">
-						                        삭제된 게시글입니다.
+						                    <span class="parent-title" data-root="${n.rootId}" style="cursor:pointer;">
+							                    <c:if test="${n.hasChild == 'Y'}">
+							                    	<span class="toggle-icon">▶</span>
+							                    </c:if>
+												<span class="deleted-text">
+							                        삭제된 게시글입니다.
+							                    </span>
 						                    </span>
 						                </c:when>
 						                <c:otherwise>
@@ -90,20 +98,21 @@
 								                <c:if test="${n.hasChild == 'Y'}">
 								                    <span class="toggle-icon">▶</span>
 								                </c:if>
-								                <a href="<c:url value='/bbs/notice/selectNoticeDetail.do'>
-								                         <c:param name='nttId' value='${n.nttId}'/>
-								                         </c:url>">
-								                    ${n.subject}
-								                </a>
+												<c:url var="detailUrl" value="/bbs/notice/selectNoticeDetail.do">
+													<c:param name="nttId" value="${n.nttId}"/>
+												</c:url>
+												<a href="${detailUrl}">
+													${n.subject}
+												</a>
 								            </span>
-						                    <button type="button" class="btnReply" data-parent="${n.nttId}">
-						                        답글
-						                    </button>
-						                </c:otherwise>
+								            <button type="button" class="btnReply" data-parent="${n.nttId}">
+								                답글
+								            </button>
+							        	</c:otherwise>
 						            </c:choose>
-					            </td>
-								<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
-								<td class="nt-col-view"><c:out value="${n.viewCnt}" /></td>
+					        </td>
+							<td class="nt-col-date"><c:out value="${n.frstRegistPnttm}" /></td>
+							<td class="nt-col-view"><c:out value="${n.viewCnt}" /></td>
 					        </tr>
 					    </c:if>
 					    <c:if test="${n.nttLevel > 1}">
@@ -112,7 +121,7 @@
 					            <td></td>
 					            <td colspan="3">
 					                <div class="reply-box" style="margin-left:${(n.nttLevel - 1) * 25}px;">
-					                    <span class="reply-arrow">▶</span>
+				                    	<span class="toggle-icon">▶</span>
 					                     <c:choose>
 						                    <c:when test="${n.rootDelAt  == 'Y'}">
 						                        <span class="deleted-parent-msg">
@@ -120,13 +129,18 @@
 						                        </span>
 						                    </c:when>
 						                    <c:otherwise>
-						                        <span class="reply-content">
-						                            ${n.content}
-						                        </span>
-          					                    <span class="reply-date">(${n.frstRegistPnttm})</span>
-					                    		<button type="button" class="btnReply" data-parent="${n.nttId}">
+						                    	<span class="parent-title" data-root="${n.rootId}" style="cursor:pointer;">
+       											<c:url var="detailUrl" value="/bbs/notice/selectNoticeDetail.do">
+													<c:param name="nttId" value="${n.nttId}"/>
+												</c:url>
+												<a href="${detailUrl}" class="reply-content">
+													${n.subject}
+												</a>
+					       	                    <span class="reply-date">(${n.frstRegistPnttm})</span>
+												<button type="button" class="btnReply" data-parent="${n.nttId}">
 					                        		답글
-					                    		</button>
+												</button>
+												</span>
 						                    </c:otherwise>
 						                </c:choose>
 
@@ -136,25 +150,20 @@
 					    </c:if>
 					</c:forEach>
 
- 					<tr id="replyRow" style="display:none;">
-            			<td colspan="5">
-                			<form id="replyForm" method="post" action="<c:url value='/bbs/notice/reply.do'/>">
-
-			                    <input type="hidden" name="parntNttId" id="parntNttId"/>
+				 	<tr id="replyRow" style="display:none;">
+						<td colspan="5">
+							<form id="replyForm" method="post" action="<c:url value='/bbs/notice/reply.do'/>">			                    <input type="hidden" name="parntNttId" id="parntNttId"/>
 			                    <input type="hidden" name="bbsId" value="${searchVO.bbsId}"/>
-			
+					
 			                    <input type="text" name="subject" placeholder="제목"/>
 			                    <textarea name="content" placeholder="내용"></textarea>
 			                    <button type="submit">등록</button>
 								<button type="button" id="btnCancelReply">취소</button>
 			                </form>
-			            </td>
-			        </tr>
-
-				</c:when>
+					    </td>
+					</tr>				</c:when>
 				<c:otherwise>
-					<tr>
-						<td colspan="4" style="text-align: center; color: #666;">조회된 데이터가 없습니다.</td>
+					<tr>						<td colspan="4" style="text-align: center; color: #666;">조회된 데이터가 없습니다.</td>
 					</tr>
 				</c:otherwise>
 			</c:choose>
@@ -164,8 +173,7 @@
     <div class="btn-area">
         <button type="button" id="btnDelete">선택삭제</button>
     </div>
-
-	<div class="pagination">
+	<div class="pagination">
 		<c:if test="${not empty paginationInfo}">
 			<ui:pagination paginationInfo="${paginationInfo}" type="text" jsFunction="fn_egov_link_page" />
 		</c:if>
