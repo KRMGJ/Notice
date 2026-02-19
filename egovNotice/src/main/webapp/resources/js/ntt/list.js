@@ -15,15 +15,14 @@ $(function() {
 
 $(document).ready(function() {
 
-	// 전체 선택
-	$("#checkAll").on("click", function() {
-		$("input[name='nttId']").prop("checked", $(this).is(":checked"));
-	});
-
-	// 선택 삭제
 	$("#btnDelete").on("click", function() {
 
 		const checked = $("input[name='nttId']:checked");
+
+		if (checked.length === 0) {
+			alert("삭제할 게시글을 선택하세요.");
+			return;
+		}
 
 		if (!confirm("선택한 게시글을 삭제하시겠습니까?")) {
 			return;
@@ -48,11 +47,12 @@ $(document).ready(function() {
 				alert("삭제 중 오류가 발생했습니다.");
 			}
 		});
-
 	});
 
-	$(".btnDeleteReply").on("click", function() {
-		var nttId = $(this).data("id");
+	$(document).on("click", ".btnDeleteReply", function() {
+
+		const nttId = $(this).data("id");
+
 		if (!confirm("댓글을 삭제하시겠습니까?")) {
 			return;
 		}
@@ -70,24 +70,22 @@ $(document).ready(function() {
 			}
 		});
 	});
+
 });
 
-$(function() {
+$(window).on("load", function() {
 
-	$(document).on("click", ".parent-title", function(e) {
+	const opened = JSON.parse(localStorage.getItem("openedRoots") || "[]");
 
-		if ($(e.target).is("a")) return;
+	if (!opened.length) return;
 
-		const rootId = $(this).data("root");
+	opened.forEach(function(rootId) {
 
 		const children = $(".nt-reply-row[data-root='" + rootId + "']");
+		const parent = $(".parent-title[data-root='" + rootId + "']");
+		const icon = parent.find(".toggle-icon");
 
-		const icon = $(this).find(".toggle-icon");
-
-		if (children.first().is(":visible")) {
-			children.hide();
-			icon.text("▶");
-		} else {
+		if (children.length > 0) {
 			children.show();
 			icon.text("▼");
 		}
@@ -97,6 +95,33 @@ $(function() {
 });
 
 
+$(document).on("click", ".parent-title", function(e) {
+
+	if ($(e.target).is("a")) return;
+
+	const rootId = $(this).data("root");
+	const children = $(".nt-reply-row[data-root='" + rootId + "']");
+	const icon = $(this).find(".toggle-icon");
+
+	let opened = JSON.parse(localStorage.getItem("openedRoots") || "[]");
+
+	if (children.first().is(":visible")) {
+		children.hide();
+		icon.text("▶");
+
+		opened = opened.filter(id => id != rootId);
+
+	} else {
+		children.show();
+		icon.text("▼");
+
+		if (!opened.includes(String(rootId))) {
+			opened.push(String(rootId));
+		}
+	}
+
+	localStorage.setItem("openedRoots", JSON.stringify(opened));
+});
 
 $(function() {
 

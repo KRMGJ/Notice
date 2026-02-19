@@ -167,6 +167,16 @@
 	        LEVEL AS NTT_LEVEL,
 	        CONNECT_BY_ROOT n.NTT_ID AS ROOT_ID,
 	        CONNECT_BY_ROOT n.DEL_AT AS ROOT_DEL_AT,
+            CASE
+	            WHEN EXISTS (
+	                SELECT 1
+	                FROM COMTNBBS p
+	                WHERE p.NTT_ID = n.PARNT_NTT_ID
+	                  AND p.DEL_AT = 'Y'
+	            )
+	            THEN 'Y'
+	            ELSE 'N'
+        	END AS PARENT_DEL_AT,
 	        CASE
 	            WHEN EXISTS (
 	                SELECT 1

@@ -155,7 +155,6 @@
                                          		</c:choose>
 						                    </c:otherwise>
 						                </c:choose>
-
 					                </div>
 					            </td>
 					        </tr>
