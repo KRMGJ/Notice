@@ -73,57 +73,6 @@ $(document).ready(function() {
 
 });
 
-$(window).on("load", function() {
-
-	const opened = JSON.parse(localStorage.getItem("openedRoots") || "[]");
-
-	if (!opened.length) return;
-
-	opened.forEach(function(rootId) {
-
-		const children = $(".nt-reply-row[data-root='" + rootId + "']");
-		const parent = $(".parent-title[data-root='" + rootId + "']");
-		const icon = parent.find(".toggle-icon");
-
-		if (children.length > 0) {
-			children.show();
-			icon.text("▼");
-		}
-
-	});
-
-});
-
-
-$(document).on("click", ".parent-title", function(e) {
-
-	if ($(e.target).is("a")) return;
-
-	const rootId = $(this).data("root");
-	const children = $(".nt-reply-row[data-root='" + rootId + "']");
-	const icon = $(this).find(".toggle-icon");
-
-	let opened = JSON.parse(localStorage.getItem("openedRoots") || "[]");
-
-	if (children.first().is(":visible")) {
-		children.hide();
-		icon.text("▶");
-
-		// 열린 상태에서 닫히면 opened 배열에서 제거
-		opened = opened.filter(id => id != rootId);
-
-	} else {
-		children.show();
-		icon.text("▼");
-
-		if (!opened.includes(String(rootId))) {
-			opened.push(String(rootId));
-		}
-	}
-
-	localStorage.setItem("openedRoots", JSON.stringify(opened));
-});
-
 $(function() {
 
 	$(document).on("click", ".btnReply", function(e) {

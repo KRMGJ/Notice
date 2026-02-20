@@ -1,9 +1,6 @@
 package egovframework.let.bbs.ntt.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -35,21 +32,7 @@ public class NoticeServiceImpl implements NoticeService {
 	 */
 	@Override
 	public List<NoticeVO> selectNoticeList(NoticeVO searchVO) throws Exception {
-		List<NoticeVO> parentList = noticeDAO.selectNoticeParentList(searchVO);
-
-		if (parentList.isEmpty()) {
-			return parentList;
-		}
-
-		List<String> parentIdList = parentList.stream().map(NoticeVO::getNttId).collect(Collectors.toList());
-
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("bbsId", searchVO.getBbsId());
-		paramMap.put("parentIdList", parentIdList);
-
-		List<NoticeVO> treeList = noticeDAO.selectNoticeChildTreeList(paramMap);
-
-		return treeList;
+		return noticeDAO.selectNoticeTreeList(searchVO);
 	}
 
 	/**
